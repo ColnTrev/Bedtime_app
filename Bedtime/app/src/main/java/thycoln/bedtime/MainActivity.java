@@ -1,4 +1,4 @@
-package colntrev.test;
+package thycoln.bedtime;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
