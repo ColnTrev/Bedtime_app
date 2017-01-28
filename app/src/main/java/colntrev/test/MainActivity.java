@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
         String word = "Hi!";
         double blah = 1.0;
         int fdafda = 7;
+        int hey = 9;
         setContentView(R.layout.activity_main);
     }
 }
