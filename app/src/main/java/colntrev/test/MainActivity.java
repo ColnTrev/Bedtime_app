@@ -18,4 +18,16 @@ public class MainActivity extends AppCompatActivity {
         final int result = 1;
         startActivity(analyze);
     }
+
+    public void goSettings(View view) {
+    }
+
+    public void goTrend(View view) {
+    }
+
+    public void goTips(View view) {
+    }
+
+    public void goUpdate(View view) {
+    }
 }
