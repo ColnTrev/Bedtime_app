@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Test</string>
+    <string name="app_name">Bedtime</string>
+    <string name="Settings">Settings</string>
+    <string name="ViewTrend">View Trend</string>
+    <string name="Analyze">Analyze Log</string>
+    <string name="View">View Log</string>
+    <string name="Tips">Sleep Tips</string>
 </resources>
