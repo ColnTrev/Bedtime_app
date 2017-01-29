@@ -10,4 +10,41 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="colntrev.test.ResultActivity">
 
+    <Button
+        android:text="@string/ViewTrend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="13dp"
+        android:id="@+id/trendBtn"
+        android:onClick="goTrend" />
+
+    <Button
+        android:text="@string/View"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/trendBtn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:id="@+id/logBtn"
+        android:onClick="goUpdate" />
+
+    <TextView
+        android:text="Congratulations! You got 8 hours of sleep!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="37dp"
+        android:id="@+id/textView"
+        android:layout_alignRight="@+id/trendBtn"
+        android:layout_alignEnd="@+id/trendBtn"
+        android:layout_alignLeft="@+id/logBtn"
+        android:layout_alignStart="@+id/logBtn"
+        android:textAlignment="center" />
 </RelativeLayout>
