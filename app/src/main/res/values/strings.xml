@@ -5,4 +5,5 @@
     <string name="Analyze">Analyze Log</string>
     <string name="View">View Log</string>
     <string name="Tips">Sleep Tips</string>
+    <string name="title_activity_analyze">AnalyzeActivity</string>
 </resources>
