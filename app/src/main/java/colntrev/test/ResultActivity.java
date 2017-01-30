@@ -23,4 +23,9 @@ public class ResultActivity extends AppCompatActivity {
         Intent update = new Intent(this, UpdateActivity.class);
         startActivity(update);
     }
+
+    public void goBack(View view) {
+        Intent back = new Intent(this, MainActivity.class);
+        startActivity(back);
+    }
 }

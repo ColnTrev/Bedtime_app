@@ -23,11 +23,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goTrend(View view) {
+        Intent trend = new Intent(this, TrendActivity.class);
+        startActivity(trend);
     }
 
     public void goTips(View view) {
     }
 
     public void goUpdate(View view) {
+        Intent update = new Intent(this, UpdateActivity.class);
+        startActivity(update);
     }
 }

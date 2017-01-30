@@ -47,4 +47,13 @@
         android:layout_alignLeft="@+id/logBtn"
         android:layout_alignStart="@+id/logBtn"
         android:textAlignment="center" />
+
+    <Button
+        android:text="Main Menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/trendBtn"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/backBtn"
+        android:onClick="goBack" />
 </RelativeLayout>
