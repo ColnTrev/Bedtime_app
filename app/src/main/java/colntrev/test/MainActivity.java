@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
     public void goTips(View view) {
     }
 
-    public void goUpdate(View view) {
+    /*public void goUpdate(View view) {
         Intent update = new Intent(this, UpdateActivity.class);
         startActivity(update);
-    }
+    }*/
 }

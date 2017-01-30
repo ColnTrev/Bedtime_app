@@ -19,10 +19,10 @@ public class ResultActivity extends AppCompatActivity {
         startActivity(trend);
     }
 
-    public void goUpdate(View view) {
+    /*public void goUpdate(View view) {
         Intent update = new Intent(this, UpdateActivity.class);
         startActivity(update);
-    }
+    }*/
 
     public void goBack(View view) {
         Intent back = new Intent(this, MainActivity.class);
