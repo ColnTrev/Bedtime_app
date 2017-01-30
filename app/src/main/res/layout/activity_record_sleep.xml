@@ -104,7 +104,8 @@
         android:layout_below="@+id/textView5"
         android:layout_alignLeft="@+id/textView_bedAMPM"
         android:layout_alignStart="@+id/textView_bedAMPM"
-        android:id="@+id/checkBox" />
+        android:id="@+id/checkBox"
+        android:onClick="setWakeTimeToNow"/>
 
     <Button
         android:text="Done"

@@ -35,7 +35,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/button_wakeUp"
-            android:paddingRight="20dp"/>
+            android:paddingRight="20dp"
+            android:checked="true" />
         <RadioButton
             android:text="sleep at"
             android:layout_width="wrap_content"
@@ -90,7 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/button_rec2"
-            android:paddingRight="20dp"/>
+            android:paddingRight="20dp" />
         <RadioButton
             android:text="--:--"
             android:layout_width="wrap_content"
