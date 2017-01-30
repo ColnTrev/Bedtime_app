@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_setup"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="colntrev.test.SetupActivity">
+
+    <TextView
+        android:text="I want to:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView_wakeUp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="18sp" />
+
+    <RadioGroup
+        android:id="@+id/radioGrp_wakeSleep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView_wakeUp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="11dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:text="wake up at"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_wakeUp"
+            android:paddingRight="20dp"/>
+        <RadioButton
+            android:text="sleep at"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_sleep" />
+    </RadioGroup>
+
+
+
+    <EditText
+        android:id="@+id/editText_time1"
+        android:text="6:00"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:ems="10"
+        android:layout_below="@+id/radioGrp_wakeSleep"
+        android:hint="00:00"
+         />
+
+
+    <TextView
+        android:id="@+id/textView_rec"
+        android:text="Suggested bedtime to avoid grogginess:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText_time1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="18sp" />
+
+
+    <RadioGroup
+        android:id="@+id/radioGrp_rec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView_rec"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="11dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:text="--:--"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_rec1"
+            android:layout_below="@+id/textView_wakeUp"
+            android:paddingRight="20dp"/>
+        <RadioButton
+            android:text="--:--"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_rec2"
+            android:paddingRight="20dp"/>
+        <RadioButton
+            android:text="--:--"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_rec3"
+            android:paddingRight="20dp"/>
+    </RadioGroup>
+
+    <TextView
+        android:text="Set bedtime at"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/radioGrp_rec"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/textView_setTime"
+        android:textSize="18sp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:ems="10"
+        android:layout_below="@+id/textView_setTime"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/editText_setTime"
+        android:hint="00:00"
+        android:text="10:00"/>
+
+    <TextView
+        android:text="AM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/radioGrp_wakeSleep"
+        android:layout_toRightOf="@+id/editText_time1"
+        android:layout_toEndOf="@+id/editText_time1"
+        android:id="@+id/textView_AMPM"
+        android:textSize="18sp"/>
+
+    <Button
+        android:text="Set reminder 30min in adv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_readDefault"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp"
+        android:id="@+id/button2"
+        android:onClick="setReminder" />
+
+    <Button
+        android:text="test: read internal storage file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText_setTime"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/button_readDefault"
+        android:onClick="displayDefaultSetting" />
+
+    <TextView
+        android:text="TextView to be replaced by text from internal storage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="27dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="42dp"
+        android:id="@+id/textView_test" />
+
+
+</RelativeLayout>
