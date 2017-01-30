@@ -2,6 +2,7 @@ package colntrev.test;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -24,5 +25,11 @@ public class TrendActivity extends AppCompatActivity {
             series.appendData(new DataPoint(x,y), true, 500);
         }
         graph.addSeries(series);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_trend, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 }
