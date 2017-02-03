@@ -50,6 +50,7 @@ public class SetupActivity extends AppCompatActivity {
                     Button recTime2 = (Button) findViewById(R.id.button_rec2);
                     Button recTime3 = (Button) findViewById(R.id.button_rec3);
 
+                    // dummy times
                     recTime1.setText("10:30");
                     recTime2.setText("12:00");
                     recTime3.setText("1:30");
@@ -91,9 +92,9 @@ public class SetupActivity extends AppCompatActivity {
         String filename = "defaultReminder";
         StringBuilder sb = new StringBuilder();
         String content;
-        Context context = getApplicationContext();
+        //Context context = getApplicationContext();
         try {
-            FileInputStream fis = context.openFileInput(filename);
+            FileInputStream fis = openFileInput(filename);
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader bufferedReader = new BufferedReader(isr);
             String line;
