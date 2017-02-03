@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.ButtonBarLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,16 +45,68 @@ public class SetupActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 String timeInput = time1.getText().toString();
 
-                // prototype 2: check for correct time input & in 00 or 00:00 format
-                if(timeInput.length() == 2) {
+                // to do : check for correct time input & in 00 or 00:00 format
+                if(timeInput.length() == 2 || timeInput.length()== 4 || timeInput.length()==5) {
+
+                    Log.d("katsudon", "time input:"+timeInput);
+
+                    //Log.d("katsudon", timeInput.substring(0,timeInput.indexOf(":")));
+
+                    // MUST FIX: currently only takes 00, 00:, or 0: . Minute is ignored
+                    // wake or sleep time
+                    int wakeHr;
+                    int wakeMin=0;
+                    if (timeInput.contains(":")) {
+                        wakeHr = Integer.parseInt(timeInput.substring(0, timeInput.indexOf(":")));
+                        if (timeInput.length()>3) {
+                            wakeMin = Integer.parseInt(timeInput.substring(timeInput.indexOf(":") + 1));
+                        }
+                    }else{
+                        wakeHr = Integer.parseInt(timeInput);
+                    }
+
+
                     Button recTime1 = (Button) findViewById(R.id.button_rec1);
                     Button recTime2 = (Button) findViewById(R.id.button_rec2);
                     Button recTime3 = (Button) findViewById(R.id.button_rec3);
 
-                    // dummy times
-                    recTime1.setText("10:30");
-                    recTime2.setText("12:00");
-                    recTime3.setText("1:30");
+                    // dummy times: works for wake time only
+                    int cycleTime = 90;
+                    int sleepTime = (wakeHr+12) * 60 + wakeMin - 15 - cycleTime*5;
+                    int hr = sleepTime/60;
+                    int min = sleepTime%60;
+                    if (hr > 12 || hr==12){
+                        hr-= 12;
+                    }
+                    if (min > 10) {
+                        recTime1.setText("" + hr + ":" + min);
+                    }else{
+                        recTime1.setText("" + hr + ":0" + min);
+                    }
+
+                    sleepTime+= cycleTime;
+                    hr = sleepTime/60;
+                    min = sleepTime%60;
+                    if (hr > 12 || hr==12){
+                        hr-= 12;
+                    }
+                    if (min > 10) {
+                        recTime2.setText("" + hr + ":" + min);
+                    }else{
+                        recTime2.setText("" + hr + ":0" + min);
+                    }
+
+                    sleepTime+= cycleTime;
+                    hr = sleepTime/60;
+                    min = sleepTime%60;
+                    if (hr > 12 || hr==12){
+                        hr-= 12;
+                    }
+                    if (min > 10) {
+                        recTime3.setText("" + hr + ":" + min);
+                    }else{
+                        recTime3.setText("" + hr + ":0" + min);
+                    }
                 }
 
 
