@@ -15,7 +15,6 @@ public class AnalyzeActivity extends AppCompatActivity {
 
     public void backToMain(View view) {
         Intent homeScreen = new Intent(this, MainActivity.class);
-        final int result = 1;
         startActivity(homeScreen);
     }
 }

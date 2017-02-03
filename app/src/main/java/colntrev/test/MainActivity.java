@@ -15,7 +15,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void goAnalyze(View view) {
         Intent analyze = new Intent(this,AnalyzeActivity.class);
-        final int result = 1;
         startActivity(analyze);
     }
 
@@ -30,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
     public void goTips(View view) {
     }
 
-    /*public void goUpdate(View view) {
+    public void goUpdate(View view) {
         Intent update = new Intent(this, UpdateActivity.class);
         startActivity(update);
-    }*/
+    }
 }
