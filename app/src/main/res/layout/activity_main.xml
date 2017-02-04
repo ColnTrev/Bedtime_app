@@ -10,33 +10,75 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="colntrev.test.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:id="@+id/textView" />
-
     <Button
-        android:text="Set Time"
+        android:text="@string/View"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
+        android:id="@+id/viewLogBtn"
+        android:layout_below="@+id/tipsBtn"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="28dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="37dp"
-        android:id="@+id/button"
-        android:onClick="toSetup" />
+        android:onClick="goUpdate"/>
 
     <Button
-        android:text="Record"
+        android:text="@string/Tips"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button"
-        android:layout_alignRight="@+id/button"
-        android:layout_alignEnd="@+id/button"
-        android:layout_marginTop="18dp"
-        android:id="@+id/button3"
-        android:onClick="toRecordSleep" />
+        android:id="@+id/tipsBtn"
+        android:layout_below="@+id/trendBtn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="goTips"/>
+
+    <Button
+        android:text="@string/ViewTrend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/trendBtn"
+        android:layout_below="@+id/settingsBtn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="goTrend"/>
+
+    <Button
+        android:text="@string/Analyze"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/anaLogBtn"
+        android:layout_below="@+id/viewLogBtn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="goAnalyze" />
+
+    <Button
+        android:text="@string/Settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/settingsBtn"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="goSettings"/>
+
+    <Button
+        android:text="Record Sleep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/anaLogBtn"
+        android:id="@+id/recSleepBtn"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="goRecordSleep" />
 </RelativeLayout>
