@@ -133,17 +133,6 @@
         android:textSize="18sp"/>
 
     <Button
-        android:text="Set reminder 30min in adv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button_readDefault"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp"
-        android:id="@+id/button2"
-        android:onClick="setReminder" />
-
-    <Button
         android:text="test: read internal storage file"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -164,6 +153,26 @@
         android:layout_marginStart="27dp"
         android:layout_marginTop="42dp"
         android:id="@+id/textView_test" />
+
+    <Button
+        android:text="save default reminder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button2"
+        android:onClick="saveDefaultReminder"
+        android:layout_below="@+id/button_readDefault"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="test: reminder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/button_setReminder"
+        android:onClick="setReminder" />
 
 
 </RelativeLayout>

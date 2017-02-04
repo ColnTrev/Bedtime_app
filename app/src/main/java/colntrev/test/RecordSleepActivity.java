@@ -1,3 +1,6 @@
+// RecordSleepActivity.java
+// Thy Vu
+
 package colntrev.test;
 
 import android.content.Context;

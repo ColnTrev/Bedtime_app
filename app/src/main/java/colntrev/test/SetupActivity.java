@@ -1,6 +1,12 @@
+// SetupActivity.java
+// Thy Vu
+
 package colntrev.test;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ButtonBarLayout;
@@ -18,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Calendar;
 
 public class SetupActivity extends AppCompatActivity {
 
@@ -127,7 +134,21 @@ public class SetupActivity extends AppCompatActivity {
 
     }
 
-    public void setReminder(View view) throws IOException {
+    public void setReminder(View view)  {
+        Log.d("nete", "setting reminder");
+
+        Intent reminderIntent = new Intent(this, ReminderBroadcastReceiver.class);
+        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getService(this,0,reminderIntent,0);
+
+        // alarm in 5 seconds
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ 1000*5, pendingIntent);
+        Log.d("nete", "set reminder");
+
+
+    }
+
+    public void saveDefaultReminder(View view) throws IOException {
         String filename = "defaultReminder";
 
         EditText textView = (EditText) findViewById(R.id.editText_setTime);
