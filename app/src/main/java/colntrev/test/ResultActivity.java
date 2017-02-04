@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import java.io.FileOutputStream;
+
 
 public class ResultActivity extends AppCompatActivity {
 
@@ -28,4 +30,5 @@ public class ResultActivity extends AppCompatActivity {
         Intent back = new Intent(this, MainActivity.class);
         startActivity(back);
     }
+
 }

@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goSettings(View view) {
+        Intent settings = new Intent(this, SetupActivity.class);
+        startActivity(settings);
     }
 
     public void goTrend(View view) {
@@ -32,5 +34,10 @@ public class MainActivity extends AppCompatActivity {
     public void goUpdate(View view) {
         Intent update = new Intent(this, UpdateActivity.class);
         startActivity(update);
+    }
+
+    public void goRecordSleep(View view) {
+        Intent record = new Intent(this, RecordSleepActivity.class);
+        startActivity(record);
     }
 }
