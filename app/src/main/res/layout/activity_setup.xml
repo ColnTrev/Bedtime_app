@@ -44,7 +44,14 @@
             android:id="@+id/button_sleep" />
     </RadioGroup>
 
-
+    <TextView
+        android:text="AM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/radioGrp_wakeSleep"
+        android:layout_alignBaseline="@+id/editText_time1"
+        android:id="@+id/textView_AMPM"
+        android:textSize="18sp"/>
 
     <EditText
         android:id="@+id/editText_time1"
@@ -54,6 +61,7 @@
         android:inputType="time"
         android:ems="10"
         android:layout_below="@+id/radioGrp_wakeSleep"
+        android:layout_toRightOf="@id/textView_AMPM"
         android:hint="00:00"
          />
 
@@ -110,27 +118,6 @@
         android:id="@+id/textView_setTime"
         android:textSize="18sp" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="time"
-        android:ems="10"
-        android:layout_below="@+id/textView_setTime"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/editText_setTime"
-        android:hint="00:00"
-        android:text="10:00"/>
-
-    <TextView
-        android:text="AM"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/radioGrp_wakeSleep"
-        android:layout_toRightOf="@+id/editText_time1"
-        android:layout_toEndOf="@+id/editText_time1"
-        android:id="@+id/textView_AMPM"
-        android:textSize="18sp"/>
 
     <Button
         android:text="test: read internal storage file"
@@ -142,17 +129,6 @@
         android:id="@+id/button_readDefault"
         android:onClick="displayDefaultSetting" />
 
-    <TextView
-        android:text="TextView to be replaced by text from internal storage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="27dp"
-        android:layout_marginStart="27dp"
-        android:layout_marginTop="42dp"
-        android:id="@+id/textView_test" />
 
     <Button
         android:text="save default reminder"
@@ -173,6 +149,29 @@
         android:layout_alignParentStart="true"
         android:id="@+id/button_setReminder"
         android:onClick="setReminder" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:ems="10"
+        android:id="@+id/editText_setTime"
+        android:hint="00:00"
+        android:text="10:00"
+        android:layout_below="@+id/textView_setTime"
+        android:layout_alignLeft="@+id/editText_time1"
+        android:layout_alignStart="@+id/editText_time1" />
+
+    <TextView
+        android:text="PM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_readDefault"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignBaseline="@+id/editText_setTime"
+        android:id="@+id/textView_AMPM2"
+        android:textSize="18sp"/>
 
 
 </RelativeLayout>

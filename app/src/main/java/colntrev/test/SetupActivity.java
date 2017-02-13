@@ -59,8 +59,7 @@ public class SetupActivity extends AppCompatActivity {
 
                     //Log.d("katsudon", timeInput.substring(0,timeInput.indexOf(":")));
 
-                    // MUST FIX: currently only takes 00, 00:, or 0: . Minute is ignored
-                    // wake or sleep time
+
                     int wakeHr;
                     int wakeMin=0;
                     if (timeInput.contains(":")) {
@@ -85,7 +84,7 @@ public class SetupActivity extends AppCompatActivity {
                     if (hr > 12 || hr==12){
                         hr-= 12;
                     }
-                    if (min > 10) {
+                    if (min >= 10) {
                         recTime1.setText("" + hr + ":" + min);
                     }else{
                         recTime1.setText("" + hr + ":0" + min);
@@ -97,7 +96,7 @@ public class SetupActivity extends AppCompatActivity {
                     if (hr > 12 || hr==12){
                         hr-= 12;
                     }
-                    if (min > 10) {
+                    if (min >= 10) {
                         recTime2.setText("" + hr + ":" + min);
                     }else{
                         recTime2.setText("" + hr + ":0" + min);
@@ -109,7 +108,7 @@ public class SetupActivity extends AppCompatActivity {
                     if (hr > 12 || hr==12){
                         hr-= 12;
                     }
-                    if (min > 10) {
+                    if (min >= 10) {
                         recTime3.setText("" + hr + ":" + min);
                     }else{
                         recTime3.setText("" + hr + ":0" + min);
@@ -136,13 +135,26 @@ public class SetupActivity extends AppCompatActivity {
 
     public void setReminder(View view)  {
         Log.d("nete", "setting reminder");
+        /* new version: in progress
 
         Intent reminderIntent = new Intent(this, ReminderBroadcastReceiver.class);
-        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getService(this,0,reminderIntent,0);
 
         // alarm in 5 seconds
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ 1000*5, pendingIntent);
+        */
+
+         // Old version: problem: notif won't self-clear.
+        Intent reminderIntent = new Intent(this, ReminderService.class);
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getService(this,0,reminderIntent,0);
+
+        // alarm in 5 seconds
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ 1000*5, pendingIntent);
+
+        // end old version
+
         Log.d("nete", "set reminder");
 
 
@@ -187,8 +199,8 @@ public class SetupActivity extends AppCompatActivity {
         }
 
         // for debug
-        TextView textView = (TextView) findViewById(R.id.textView_test);
-        textView.setText("Default reminder is: " + sb.toString());
+        //TextView textView = (TextView) findViewById(R.id.textView_test);
+        //textView.setText("Default reminder is: " + sb.toString());
 
         // set wakeup time
         EditText setTime = (EditText) findViewById(R.id.editText_setTime);

@@ -20,11 +20,20 @@ import java.util.Calendar;
 
 public class RecordSleepActivity extends AppCompatActivity {
     Calendar calendar;
+    EditText bedtime;
+    TextView bed_AMPM;
+    EditText waketime;
+    TextView wake_AMPM;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_sleep);
         calendar = Calendar.getInstance();
+
+        bedtime = (EditText) findViewById(R.id.editText_bedT);
+        bed_AMPM = (TextView) findViewById(R.id.textView_bedAMPM);
+        waketime = (EditText) findViewById(R.id.editText_wakeT);
+        wake_AMPM = (TextView) findViewById(R.id.textView_wakeAMPM);
 
     }
 
@@ -34,6 +43,11 @@ public class RecordSleepActivity extends AppCompatActivity {
         int hour = calendar.get(Calendar.HOUR); // HOUR for AMPM format... but gotta check AM,PM
         int min = calendar.get(Calendar.MINUTE);
         wakeTime.setText(""+hour+":"+min);
+
+        int hourMilitary = calendar.get(Calendar.HOUR_OF_DAY);
+        if (hourMilitary > 12 || (hourMilitary == 12 && min > 0)){
+            wake_AMPM.setText("PM");
+        }
 
 
 
@@ -71,10 +85,11 @@ public class RecordSleepActivity extends AppCompatActivity {
         String filename = "SleepRecord";
         String record = ""+ calendar.get(Calendar.YEAR) + " " + calendar.get(Calendar.MONTH) + " "
                 + calendar.get(Calendar.DATE)+ " ";
-        EditText bedtime = (EditText) findViewById(R.id.editText_bedT);
-        record = record + bedtime.getText().toString() + " ";
-        EditText waketime = (EditText) findViewById(R.id.editText_wakeT);
-        record = record + waketime.getText().toString()+ "\n";
+
+
+
+        record = record + bedtime.getText().toString() + " " + bed_AMPM.getText().toString() + " "
+                + waketime.getText().toString()+ " "+ wake_AMPM.getText().toString() + "\n";
 
         FileOutputStream fos = null;
         try {
@@ -85,8 +100,15 @@ public class RecordSleepActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
 
-
-
+    public void toggleAMPM(View view) {
+        TextView tvAMPM = (TextView) view;
+        String currentText = tvAMPM.getText().toString();
+        if(currentText.equals("AM")){
+            tvAMPM.setText("PM");
+        }else{
+            tvAMPM.setText("AM");
+        }
     }
 }
