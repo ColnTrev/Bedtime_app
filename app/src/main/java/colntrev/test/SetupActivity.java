@@ -9,13 +9,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.ButtonBarLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -27,6 +27,11 @@ import java.io.InputStreamReader;
 import java.util.Calendar;
 
 public class SetupActivity extends AppCompatActivity {
+    final static int REMINDER_REQUEST_CODE = 54321;
+    private EditText editText_reminderTime;
+    private TextView textView_remindAMPM;
+    private AlarmManager alarmManager;
+    private Button button_remind;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +39,10 @@ public class SetupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setup);
 
 
-
+        editText_reminderTime = (EditText) findViewById(R.id.editText_setTime);
+        textView_remindAMPM = (TextView) findViewById(R.id.textView_AMPM2);
+        button_remind = (Button) findViewById(R.id.button_setReminder);
+        alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
 
 
 
@@ -133,29 +141,48 @@ public class SetupActivity extends AppCompatActivity {
 
     }
 
-    public void setReminder(View view)  {
+    private void setReminder(View view)  {
         Log.d("nete", "setting reminder");
-        /* new version: in progress
+        // new version: in progress
 
-        Intent reminderIntent = new Intent(this, ReminderBroadcastReceiver.class);
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getService(this,0,reminderIntent,0);
 
-        // alarm in 5 seconds
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ 1000*5, pendingIntent);
-        */
 
-         // Old version: problem: notif won't self-clear.
+
+        String timeInput = editText_reminderTime.getText().toString();
+        ((Button)view).setText("reminder: "+textView_remindAMPM.getText().toString()+" "+timeInput);
+
+        // Set alarm to user's input of reminder time
+        int remindHr;
+        int remindMin=0;
+        if (timeInput.contains(":")) {
+            remindHr = Integer.parseInt(timeInput.substring(0, timeInput.indexOf(":")));
+            if (timeInput.length()>3) {
+                remindMin = Integer.parseInt(timeInput.substring(timeInput.indexOf(":") + 1));
+            }
+        }else{
+            remindHr = Integer.parseInt(timeInput);
+        }
+
+
+
+        if (textView_remindAMPM.getText().toString().equals("PM")&& remindHr<12){
+            remindHr += 12;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, remindHr);
+        calendar.set(Calendar.MINUTE, remindMin);
+
+
+
         Intent reminderIntent = new Intent(this, ReminderService.class);
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getService(this,0,reminderIntent,0);
+        PendingIntent pendingIntent = PendingIntent.getService(this,REMINDER_REQUEST_CODE,reminderIntent,0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                1000*60*60*24, pendingIntent);
 
-        // alarm in 5 seconds
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+ 1000*5, pendingIntent);
 
-        // end old version
 
-        Log.d("nete", "set reminder");
+        Log.d("nete", "set reminder:"+remindHr+":"+remindMin);
 
 
     }
@@ -163,8 +190,7 @@ public class SetupActivity extends AppCompatActivity {
     public void saveDefaultReminder(View view) throws IOException {
         String filename = "defaultReminder";
 
-        EditText textView = (EditText) findViewById(R.id.editText_setTime);
-        String defaultReminder = textView.getText().toString();
+        String defaultReminder = editText_reminderTime.getText().toString();
 
         FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE);
 
@@ -205,6 +231,31 @@ public class SetupActivity extends AppCompatActivity {
         // set wakeup time
         EditText setTime = (EditText) findViewById(R.id.editText_setTime);
         setTime.setText(sb.toString());
+
+    }
+
+
+
+    public void onSuggestedTimeClick(View view) {
+
+        String chosenTime = ((RadioButton)view).getText().toString();
+        if (!chosenTime.equals("--:--"))
+            editText_reminderTime.setText(chosenTime);
+
+    }
+
+    public void onClickRemindButton(View view) {
+
+        if(button_remind.getText().toString().toLowerCase().equals("reminder: off")){
+            setReminder(view);
+        }else{
+            ((Button)view).setText("reminder: off");
+            if (alarmManager!= null) {
+                Intent reminderIntent = new Intent(this, ReminderService.class);
+                PendingIntent pendingIntent = PendingIntent.getService(this, REMINDER_REQUEST_CODE, reminderIntent, 0);
+                alarmManager.cancel(pendingIntent);
+            }
+        }
 
     }
 }

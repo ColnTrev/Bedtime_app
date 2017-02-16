@@ -93,19 +93,22 @@
             android:layout_height="wrap_content"
             android:id="@+id/button_rec1"
             android:layout_below="@+id/textView_wakeUp"
-            android:paddingRight="20dp"/>
+            android:paddingRight="20dp"
+            android:onClick="onSuggestedTimeClick" />
         <RadioButton
             android:text="--:--"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/button_rec2"
-            android:paddingRight="20dp" />
+            android:paddingRight="20dp"
+            android:onClick="onSuggestedTimeClick" />
         <RadioButton
             android:text="--:--"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/button_rec3"
-            android:paddingRight="20dp"/>
+            android:paddingRight="20dp"
+            android:onClick="onSuggestedTimeClick" />
     </RadioGroup>
 
     <TextView
@@ -140,16 +143,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <Button
-        android:text="test: reminder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/button_setReminder"
-        android:onClick="setReminder" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -172,6 +165,21 @@
         android:layout_alignBaseline="@+id/editText_setTime"
         android:id="@+id/textView_AMPM2"
         android:textSize="18sp"/>
+
+
+
+
+    <Button
+        android:text="Reminder: OFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:id="@+id/button_setReminder"
+        android:onClick="onClickRemindButton"
+        android:layout_below="@+id/button2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="27dp" />
 
 
 </RelativeLayout>

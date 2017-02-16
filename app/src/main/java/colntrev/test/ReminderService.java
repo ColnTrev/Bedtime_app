@@ -44,7 +44,7 @@ public class ReminderService extends Service {
                 .build();
         NotificationManager notifManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         notifManager.notify(1, mNotify);
-        stopSelf();
+
 
     }
 }
