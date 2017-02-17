@@ -19,11 +19,12 @@ import java.io.InputStreamReader;
 import java.util.Calendar;
 
 public class RecordSleepActivity extends AppCompatActivity {
-    Calendar calendar;
-    EditText bedtime;
-    TextView bed_AMPM;
-    EditText waketime;
-    TextView wake_AMPM;
+    private Calendar calendar;
+    private EditText bedtime;
+    private TextView bed_AMPM;
+    private EditText waketime;
+    private TextView wake_AMPM;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +82,7 @@ public class RecordSleepActivity extends AppCompatActivity {
 
     }
 
+    // Record sleep statistics when user click "SAVE"
     public void recordSleepTime(View view) {
         String filename = "SleepRecord";
         String record = ""+ calendar.get(Calendar.YEAR) + " " + calendar.get(Calendar.MONTH) + " "
@@ -102,6 +104,52 @@ public class RecordSleepActivity extends AppCompatActivity {
 
     }
 
+    // Return sleep duration in hour unit
+    private double getDurationInHr(String sleepAMPM, String sleepTime, String wakeAMPM, String wakeTime){
+        double duration=0;
+
+        // Extract hr and min from sleepTime String
+        int sleepHr =0;
+        int sleepMin=0;
+        if (sleepTime.contains(":")) {
+            sleepHr = Integer.parseInt(sleepTime.substring(0, sleepTime.indexOf(":")));
+            if (sleepTime.length()>3) {
+                sleepMin = Integer.parseInt(sleepTime.substring(sleepTime.indexOf(":") + 1));
+            }
+        }else{
+            sleepHr = Integer.parseInt(sleepTime);
+        }
+
+        // Extract hr and min from wakeTime String
+        int wakeHr=0;
+        int wakeMin=0;
+        if (wakeTime.contains(":")) {
+            wakeHr = Integer.parseInt(wakeTime.substring(0, wakeTime.indexOf(":")));
+            if (wakeTime.length()>3) {
+                wakeMin = Integer.parseInt(wakeTime.substring(wakeTime.indexOf(":") + 1));
+            }
+        }else{
+            wakeHr = Integer.parseInt(wakeTime);
+        }
+
+        // calculate duration
+        if(sleepAMPM.equals(wakeAMPM)){
+            // case1: went to sleep past midnight and wake up before noon next day
+            // case2: went to sleep before midnight and wake up before midnight
+            duration = (double)((wakeHr*60+wakeMin) - (sleepHr*60+sleepMin)) / 60;
+        }else if (sleepAMPM.equals("PM") && wakeAMPM.equals("AM")){
+            // case3: went to sleep at evening/night before 12 and wake up before noon next day
+            duration = (double)(((12-sleepHr)*60 - sleepMin) + wakeHr*60+wakeMin) / 60;
+        }else if (sleepAMPM.equals("AM") && wakeAMPM.equals("PM")){
+            // case4: went to sleep past midnight and wake up in the afternoon
+            duration = (double)(((wakeHr+12)*60+wakeMin) - (sleepHr*60+sleepMin)) / 60;
+        }
+
+
+        return duration;
+    }
+
+    // Toggle AM/PM text for TextView view
     public void toggleAMPM(View view) {
         TextView tvAMPM = (TextView) view;
         String currentText = tvAMPM.getText().toString();
@@ -110,5 +158,10 @@ public class RecordSleepActivity extends AppCompatActivity {
         }else{
             tvAMPM.setText("AM");
         }
+    }
+
+    public void showDuration(View view) {
+        double duration = getDurationInHr(bed_AMPM.getText().toString(), bedtime.getText().toString(), wake_AMPM.getText().toString(),waketime.getText().toString());
+        ((TextView)findViewById(R.id.textView_duration)).setText(String.format("%.2f", duration));
     }
 }

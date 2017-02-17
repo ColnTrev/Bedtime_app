@@ -68,6 +68,7 @@ public class SetupActivity extends AppCompatActivity {
                     //Log.d("katsudon", timeInput.substring(0,timeInput.indexOf(":")));
 
 
+                    // get user-desired wake time
                     int wakeHr;
                     int wakeMin=0;
                     if (timeInput.contains(":")) {
@@ -84,7 +85,8 @@ public class SetupActivity extends AppCompatActivity {
                     Button recTime2 = (Button) findViewById(R.id.button_rec2);
                     Button recTime3 = (Button) findViewById(R.id.button_rec3);
 
-                    // dummy times: works for wake time only
+                    // Note: algo works for suggested sleep times only
+                    // Calculate and display suggested sleep time #1
                     int cycleTime = 90;
                     int sleepTime = (wakeHr+12) * 60 + wakeMin - 15 - cycleTime*5;
                     int hr = sleepTime/60;
@@ -98,6 +100,7 @@ public class SetupActivity extends AppCompatActivity {
                         recTime1.setText("" + hr + ":0" + min);
                     }
 
+                    // Calculate and display suggested sleep time #2
                     sleepTime+= cycleTime;
                     hr = sleepTime/60;
                     min = sleepTime%60;
@@ -110,6 +113,7 @@ public class SetupActivity extends AppCompatActivity {
                         recTime2.setText("" + hr + ":0" + min);
                     }
 
+                    // Calculate and display suggested sleep time #3
                     sleepTime+= cycleTime;
                     hr = sleepTime/60;
                     min = sleepTime%60;
@@ -122,6 +126,11 @@ public class SetupActivity extends AppCompatActivity {
                         recTime3.setText("" + hr + ":0" + min);
                     }
                 }
+
+            }
+
+            // for refactoring/clean-up later
+            private void displaySuggestedSleepTime(Button btn, int sleepTimeInMin){
 
 
             }
@@ -141,17 +150,16 @@ public class SetupActivity extends AppCompatActivity {
 
     }
 
+    // Set reminder based on current user's input in "Set time: --:--"
     private void setReminder(View view)  {
         Log.d("nete", "setting reminder");
         // new version: in progress
 
-
-
-
         String timeInput = editText_reminderTime.getText().toString();
-        ((Button)view).setText("reminder: "+textView_remindAMPM.getText().toString()+" "+timeInput);
 
         // Set alarm to user's input of reminder time
+
+        // Get user's reminder time input
         int remindHr;
         int remindMin=0;
         if (timeInput.contains(":")) {
@@ -164,7 +172,7 @@ public class SetupActivity extends AppCompatActivity {
         }
 
 
-
+        // Set alarm to user's reminder time
         if (textView_remindAMPM.getText().toString().equals("PM")&& remindHr<12){
             remindHr += 12;
         }
@@ -172,13 +180,13 @@ public class SetupActivity extends AppCompatActivity {
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, remindHr);
         calendar.set(Calendar.MINUTE, remindMin);
-
-
-
         Intent reminderIntent = new Intent(this, ReminderService.class);
         PendingIntent pendingIntent = PendingIntent.getService(this,REMINDER_REQUEST_CODE,reminderIntent,0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 1000*60*60*24, pendingIntent);
+
+        // Reminder button's text includes reminder time
+        ((Button)view).setText("reminder: "+textView_remindAMPM.getText().toString()+" "+timeInput);
 
 
 
@@ -187,6 +195,7 @@ public class SetupActivity extends AppCompatActivity {
 
     }
 
+    // Save default reminder time
     public void saveDefaultReminder(View view) throws IOException {
         String filename = "defaultReminder";
 
@@ -199,6 +208,7 @@ public class SetupActivity extends AppCompatActivity {
 
     }
 
+    // Load default reminder time
     public void displayDefaultSetting(View view) {
 
         String filename = "defaultReminder";
@@ -235,7 +245,7 @@ public class SetupActivity extends AppCompatActivity {
     }
 
 
-
+    // Set reminder time input to user-selected suggested time
     public void onSuggestedTimeClick(View view) {
 
         String chosenTime = ((RadioButton)view).getText().toString();
@@ -244,17 +254,19 @@ public class SetupActivity extends AppCompatActivity {
 
     }
 
+    // If reminder is OFF, turn reminder ON.
+    // If reminder is ON, turn reminder OFF.
     public void onClickRemindButton(View view) {
 
         if(button_remind.getText().toString().toLowerCase().equals("reminder: off")){
             setReminder(view);
         }else{
-            ((Button)view).setText("reminder: off");
             if (alarmManager!= null) {
                 Intent reminderIntent = new Intent(this, ReminderService.class);
                 PendingIntent pendingIntent = PendingIntent.getService(this, REMINDER_REQUEST_CODE, reminderIntent, 0);
                 alarmManager.cancel(pendingIntent);
             }
+            ((Button)view).setText("reminder: off");
         }
 
     }
