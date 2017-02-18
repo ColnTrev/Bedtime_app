@@ -19,59 +19,15 @@ import java.util.ArrayList;
 public class UpdateActivity extends AppCompatActivity {
     ArrayList<String> items; // This list will get the previous list view contents and reload them
     ArrayAdapter<String> adapter;
-    FileInputStream input;
-    InputStreamReader ips;
-    BufferedReader buff;
-    FileOutputStream output;
-    static final String filename = "ActivityLog";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update);
         items = new ArrayList<>();
-        //readFile();
         populateLog();
     }
 
-    /*@Override
-    protected void onDestroy() {
-        super.onDestroy();
-        saveFile();
-    }
-
-    private void readFile(){
-        try {
-            input = openFileInput(filename);
-            ips = new InputStreamReader(input);
-            buff = new BufferedReader(ips);
-            String line;
-            while((line = buff.readLine()) != null){
-                items.add(line);
-            }
-            input.close();
-            ips.close();
-            buff.close();
-        } catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-
-    private void saveFile(){
-       ArrayList<String> save = new ArrayList<>();
-        for(int i = 0; i < adapter.getCount(); i++){
-            save.add(adapter.getItem(i));
-        }
-        try{
-            output = openFileOutput(filename, Context.MODE_APPEND);
-            for(String item : save){
-                output.write(item.getBytes());
-            }
-            output.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
 
     private void populateLog(){
         items.add("Bluetooth Games");
