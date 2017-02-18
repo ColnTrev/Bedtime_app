@@ -3,9 +3,10 @@
 
 package colntrev.test;
 
-import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,17 +14,16 @@ import android.widget.TextView;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Calendar;
 
 public class RecordSleepActivity extends AppCompatActivity {
     private Calendar calendar;
-    private EditText bedtime;
-    private TextView bed_AMPM;
-    private EditText waketime;
-    private TextView wake_AMPM;
+    private EditText editText_bedTime;
+    private TextView textView_bedAMPM;
+    private EditText editText_wakeTime;
+    private TextView textView_wakeAMPM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +31,10 @@ public class RecordSleepActivity extends AppCompatActivity {
         setContentView(R.layout.activity_record_sleep);
         calendar = Calendar.getInstance();
 
-        bedtime = (EditText) findViewById(R.id.editText_bedT);
-        bed_AMPM = (TextView) findViewById(R.id.textView_bedAMPM);
-        waketime = (EditText) findViewById(R.id.editText_wakeT);
-        wake_AMPM = (TextView) findViewById(R.id.textView_wakeAMPM);
+        editText_bedTime = (EditText) findViewById(R.id.editText_bedT);
+        textView_bedAMPM = (TextView) findViewById(R.id.textView_bedAMPM);
+        editText_wakeTime = (EditText) findViewById(R.id.editText_wakeT);
+        textView_wakeAMPM = (TextView) findViewById(R.id.textView_wakeAMPM);
 
     }
 
@@ -47,7 +47,7 @@ public class RecordSleepActivity extends AppCompatActivity {
 
         int hourMilitary = calendar.get(Calendar.HOUR_OF_DAY);
         if (hourMilitary > 12 || (hourMilitary == 12 && min > 0)){
-            wake_AMPM.setText("PM");
+            textView_wakeAMPM.setText("PM");
         }
 
 
@@ -84,14 +84,50 @@ public class RecordSleepActivity extends AppCompatActivity {
 
     // Record sleep statistics when user click "SAVE"
     public void recordSleepTime(View view) {
+        // Load SharedPreference for wantedSleep/Wake stats
+        // DB: use auto increment key because of case where 2 sleeps occur within same date
+        // eg: sleep AM wake up AM, go to sleep PM but wake up still PM same date
+        // Use calendar to get today's date
+
+
+        // get date
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int date = calendar.get(Calendar.DATE);
+
+        // get actual wake up / sleep stat
+        String bedTime = editText_bedTime.getText().toString();
+        String bedAMPM = textView_bedAMPM.getText().toString();
+        String wakeTime = editText_wakeTime.getText().toString();
+        String wakeAMPM = textView_wakeAMPM.getText().toString();
+        double duration = getDurationInHr(bedAMPM,bedTime, wakeAMPM,wakeTime);
+
+        // get desired wake up / reminder stat preferences
+        SharedPreferences preferences = getSharedPreferences(SetupActivity.PREFS_NAME, 0);
+        String wantedWakeTime = preferences.getString(SetupActivity.PREF_KEY_WANTED_WAKE_TIME, "6:00");
+        String wantedWakeAMPM = preferences.getString(SetupActivity.PREF_KEY_WANTED_WAKE_AMPM, "AM");
+        String wantedSleepTime = preferences.getString(SetupActivity.PREF_KEY_REMIND_TIME, "10:00");
+        String wantedSleepAMPM = preferences.getString(SetupActivity.PREF_KEY_REMIND_AMPM, "PM");
+        double wantedDuration=getDurationInHr(wantedSleepAMPM,wantedSleepTime,wantedWakeAMPM,wantedWakeTime);
+
+        Log.d("katsu", wantedWakeTime);
+
+
+
+        // DATABASE
+
+
+
+        // OLD
+        /*
         String filename = "SleepRecord";
         String record = ""+ calendar.get(Calendar.YEAR) + " " + calendar.get(Calendar.MONTH) + " "
                 + calendar.get(Calendar.DATE)+ " ";
 
 
 
-        record = record + bedtime.getText().toString() + " " + bed_AMPM.getText().toString() + " "
-                + waketime.getText().toString()+ " "+ wake_AMPM.getText().toString() + "\n";
+        record = record + editText_bedTime.getText().toString() + " " + textView_bedAMPM.getText().toString() + " "
+                + editText_wakeTime.getText().toString()+ " "+ textView_wakeAMPM.getText().toString() + "\n";
 
         FileOutputStream fos = null;
         try {
@@ -101,6 +137,8 @@ public class RecordSleepActivity extends AppCompatActivity {
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
+        */
+        // END OLD
 
     }
 
@@ -161,7 +199,7 @@ public class RecordSleepActivity extends AppCompatActivity {
     }
 
     public void showDuration(View view) {
-        double duration = getDurationInHr(bed_AMPM.getText().toString(), bedtime.getText().toString(), wake_AMPM.getText().toString(),waketime.getText().toString());
+        double duration = getDurationInHr(textView_bedAMPM.getText().toString(), editText_bedTime.getText().toString(), textView_wakeAMPM.getText().toString(), editText_wakeTime.getText().toString());
         ((TextView)findViewById(R.id.textView_duration)).setText(String.format("%.2f", duration));
     }
 }

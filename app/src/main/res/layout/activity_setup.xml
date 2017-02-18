@@ -38,7 +38,7 @@
             android:paddingRight="20dp"
             android:checked="true" />
         <RadioButton
-            android:text="sleep at"
+            android:text="--"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/button_sleep" />
@@ -122,26 +122,7 @@
         android:textSize="18sp" />
 
 
-    <Button
-        android:text="test: read internal storage file"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText_setTime"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/button_readDefault"
-        android:onClick="displayDefaultSetting" />
 
-
-    <Button
-        android:text="save default reminder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button2"
-        android:onClick="saveDefaultReminder"
-        android:layout_below="@+id/button_readDefault"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -159,14 +140,11 @@
         android:text="PM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button_readDefault"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignBaseline="@+id/editText_setTime"
         android:id="@+id/textView_AMPM2"
         android:textSize="18sp"/>
-
-
 
 
     <Button
@@ -176,10 +154,9 @@
         android:textSize="18sp"
         android:id="@+id/button_setReminder"
         android:onClick="onClickRemindButton"
-        android:layout_below="@+id/button2"
+        android:layout_below="@+id/editText_setTime"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="27dp" />
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>

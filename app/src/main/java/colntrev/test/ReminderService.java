@@ -33,12 +33,15 @@ public class ReminderService extends Service {
         // note: consider mNotify.setDeleteIntent(PendingIntent) for setAutoCancel (??)
         Intent intent = new Intent(this.getApplicationContext(), TipsActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        Intent intentRecord = new Intent(this.getApplicationContext(), RecordSleepActivity.class);
+        PendingIntent pIntentRecord = PendingIntent.getActivity(this, 0 , intentRecord, 0);
         //NotificationCompat.Action action = new NotificationCompat.Action.Builder(R.drawable.ic_brightness_3_black_24px,"See Tips",pIntent).build();
         Notification mNotify = new Notification.Builder(this)
                 .setContentTitle("Bed time!")
                 .setContentText("A good sleep improves memory.")
                 .setSmallIcon(R.drawable.ic_brightness_3_white_24px)
-                .addAction(0,"Help", pIntent)
+                .addAction(0,"Sleep Help", pIntent)
+                .addAction(0,"Record",pIntentRecord)
                 .setSound(sound)
                 .setAutoCancel(true)
                 .build();

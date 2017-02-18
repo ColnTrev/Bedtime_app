@@ -7,6 +7,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -27,11 +28,21 @@ import java.io.InputStreamReader;
 import java.util.Calendar;
 
 public class SetupActivity extends AppCompatActivity {
-    final static int REMINDER_REQUEST_CODE = 54321;
-    private EditText editText_reminderTime;
-    private TextView textView_remindAMPM;
+    static final String PREF_KEY_WANTED_WAKE_TIME = "wantedWakeTime";
+    static final String PREF_KEY_WANTED_WAKE_AMPM = "wantedWakeTimeAMPM";
+    static final String PREF_KEY_REMIND_TIME = "remindTime";
+    static final String PREF_KEY_REMIND_AMPM = "remindTimeAMPM";
+    static final String PREF_KEY_REMIND_IS_ON ="remindIsOn";
+    static final String PREFS_NAME = "Preferences";
+
+    private final static int REMINDER_REQUEST_CODE = 54321;
+    private EditText editText_wantedWakeTime, editText_remindTime;
+    private TextView textView_wantedWakeAMPM, textView_remindAMPM;
     private AlarmManager alarmManager;
     private Button button_remind;
+    private SharedPreferences preferences;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +50,19 @@ public class SetupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setup);
 
 
-        editText_reminderTime = (EditText) findViewById(R.id.editText_setTime);
+        editText_remindTime = (EditText) findViewById(R.id.editText_setTime);
         textView_remindAMPM = (TextView) findViewById(R.id.textView_AMPM2);
+
+        editText_wantedWakeTime = (EditText) findViewById(R.id.editText_time1);
+        textView_wantedWakeAMPM = (TextView) findViewById(R.id.textView_AMPM);
+
         button_remind = (Button) findViewById(R.id.button_setReminder);
         alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+
+
+        // restore reminder setting from predefined preferences
+        preferences = getSharedPreferences(PREFS_NAME, 0);
+
 
 
 
@@ -52,13 +72,30 @@ public class SetupActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+/*
+        editText_wantedWakeTime.setText(preferences.getString(PREF_KEY_WANTED_WAKE_TIME, "6:00"));
+        textView_wantedWakeAMPM.setText(preferences.getString(PREF_KEY_WANTED_WAKE_AMPM, "WA"));
+        editText_remindTime.setText(preferences.getString(PREF_KEY_REMIND_TIME, "10:00"));
+        textView_remindAMPM.setText(preferences.getString(PREF_KEY_REMIND_AMPM, "PM"));
+*/
 
-        final EditText time1 = (EditText) findViewById(R.id.editText_time1);
-        time1.addTextChangedListener(new TextWatcher() {
+        Log.d("katsu", preferences.getString(PREF_KEY_WANTED_WAKE_TIME, "6:00"));
+        editText_wantedWakeTime.setText(preferences.getString(PREF_KEY_WANTED_WAKE_TIME, "6:00"));
+        textView_wantedWakeAMPM.setText(preferences.getString(PREF_KEY_WANTED_WAKE_AMPM, "AM"));
+        editText_remindTime.setText(preferences.getString(PREF_KEY_REMIND_TIME, "10:30"));
+        textView_remindAMPM.setText(preferences.getString(PREF_KEY_REMIND_AMPM, "PM"));
+
+        if (preferences.getBoolean(PREF_KEY_REMIND_IS_ON, false)){
+            button_remind.setText("REMINDER: "+preferences.getString(PREF_KEY_REMIND_TIME, "10:30") +" "+
+                    preferences.getString(PREF_KEY_REMIND_AMPM, "PM"));
+        }
+
+
+        editText_wantedWakeTime.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String timeInput = time1.getText().toString();
+                String timeInput = editText_wantedWakeTime.getText().toString();
 
                 // to do : check for correct time input & in 00 or 00:00 format
                 if(timeInput.length() == 2 || timeInput.length()== 4 || timeInput.length()==5) {
@@ -129,11 +166,7 @@ public class SetupActivity extends AppCompatActivity {
 
             }
 
-            // for refactoring/clean-up later
-            private void displaySuggestedSleepTime(Button btn, int sleepTimeInMin){
 
-
-            }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start,
@@ -155,7 +188,7 @@ public class SetupActivity extends AppCompatActivity {
         Log.d("nete", "setting reminder");
         // new version: in progress
 
-        String timeInput = editText_reminderTime.getText().toString();
+        String timeInput = editText_remindTime.getText().toString();
 
         // Set alarm to user's input of reminder time
 
@@ -185,8 +218,21 @@ public class SetupActivity extends AppCompatActivity {
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 1000*60*60*24, pendingIntent);
 
+
+
+        // PUT SHAREDPREFERENCE HERE
+        // key-value: wantedWakeTime - hh:mm, wantedWakeTimeAMPM - AM, wantedDuration - double
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(PREF_KEY_WANTED_WAKE_TIME, editText_wantedWakeTime.getText().toString());
+        editor.putString(PREF_KEY_WANTED_WAKE_AMPM, textView_wantedWakeAMPM.getText().toString());
+        editor.putString(PREF_KEY_REMIND_TIME, editText_remindTime.getText().toString());
+        editor.putString(PREF_KEY_REMIND_AMPM, textView_remindAMPM.getText().toString());
+        editor.putBoolean(PREF_KEY_REMIND_IS_ON,true);
+        editor.commit();
+
+
         // Reminder button's text includes reminder time
-        ((Button)view).setText("reminder: "+textView_remindAMPM.getText().toString()+" "+timeInput);
+        ((Button)view).setText("reminder: "+timeInput+ " " + textView_remindAMPM.getText().toString());
 
 
 
@@ -197,14 +243,19 @@ public class SetupActivity extends AppCompatActivity {
 
     // Save default reminder time
     public void saveDefaultReminder(View view) throws IOException {
+
+
+        // OLD
         String filename = "defaultReminder";
 
-        String defaultReminder = editText_reminderTime.getText().toString();
+        String defaultReminder = editText_remindTime.getText().toString();
 
         FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE);
 
         fos.write(defaultReminder.getBytes());
         fos.close();
+
+        // END OLD
 
     }
 
@@ -250,7 +301,7 @@ public class SetupActivity extends AppCompatActivity {
 
         String chosenTime = ((RadioButton)view).getText().toString();
         if (!chosenTime.equals("--:--"))
-            editText_reminderTime.setText(chosenTime);
+            editText_remindTime.setText(chosenTime);
 
     }
 
@@ -259,15 +310,25 @@ public class SetupActivity extends AppCompatActivity {
     public void onClickRemindButton(View view) {
 
         if(button_remind.getText().toString().toLowerCase().equals("reminder: off")){
+            // turn reminder ON
             setReminder(view);
         }else{
+            // turn reminder OFF
             if (alarmManager!= null) {
                 Intent reminderIntent = new Intent(this, ReminderService.class);
                 PendingIntent pendingIntent = PendingIntent.getService(this, REMINDER_REQUEST_CODE, reminderIntent, 0);
                 alarmManager.cancel(pendingIntent);
             }
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(PREF_KEY_REMIND_IS_ON, false);
+            editor.commit();
+
+
             ((Button)view).setText("reminder: off");
         }
 
     }
+
+
+
 }
