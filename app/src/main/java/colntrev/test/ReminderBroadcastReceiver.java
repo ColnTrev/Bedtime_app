@@ -23,6 +23,8 @@ public class ReminderBroadcastReceiver extends BroadcastReceiver {
         Toast.makeText(context, "30 min to bed time", Toast.LENGTH_SHORT).show();
 
 
+        createReminder(context, "Bedtime!", "30 min to bedtime. Brush your teeth.");
+
         Log.d("nete", "reminder!");
         /*
         PowerManager pm  = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -30,5 +32,10 @@ public class ReminderBroadcastReceiver extends BroadcastReceiver {
         wakeLock.acquire();
         wakeLock.release();
         */
+    }
+
+    private void createReminder(Context context, String msg, String msgDetail) {
+
+
     }
 }

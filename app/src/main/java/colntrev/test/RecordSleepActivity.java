@@ -3,9 +3,10 @@
 
 package colntrev.test;
 
-import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,18 +14,27 @@ import android.widget.TextView;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Calendar;
 
 public class RecordSleepActivity extends AppCompatActivity {
-    Calendar calendar;
+    private Calendar calendar;
+    private EditText editText_bedTime;
+    private TextView textView_bedAMPM;
+    private EditText editText_wakeTime;
+    private TextView textView_wakeAMPM;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_sleep);
         calendar = Calendar.getInstance();
+
+        editText_bedTime = (EditText) findViewById(R.id.editText_bedT);
+        textView_bedAMPM = (TextView) findViewById(R.id.textView_bedAMPM);
+        editText_wakeTime = (EditText) findViewById(R.id.editText_wakeT);
+        textView_wakeAMPM = (TextView) findViewById(R.id.textView_wakeAMPM);
 
     }
 
@@ -34,6 +44,11 @@ public class RecordSleepActivity extends AppCompatActivity {
         int hour = calendar.get(Calendar.HOUR); // HOUR for AMPM format... but gotta check AM,PM
         int min = calendar.get(Calendar.MINUTE);
         wakeTime.setText(""+hour+":"+min);
+
+        int hourMilitary = calendar.get(Calendar.HOUR_OF_DAY);
+        if (hourMilitary > 12 || (hourMilitary == 12 && min > 0)){
+            textView_wakeAMPM.setText("PM");
+        }
 
 
 
@@ -67,14 +82,52 @@ public class RecordSleepActivity extends AppCompatActivity {
 
     }
 
+    // Record sleep statistics when user click "SAVE"
     public void recordSleepTime(View view) {
+        // Load SharedPreference for wantedSleep/Wake stats
+        // DB: use auto increment key because of case where 2 sleeps occur within same date
+        // eg: sleep AM wake up AM, go to sleep PM but wake up still PM same date
+        // Use calendar to get today's date
+
+
+        // get date
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int date = calendar.get(Calendar.DATE);
+
+        // get actual wake up / sleep stat
+        String bedTime = editText_bedTime.getText().toString();
+        String bedAMPM = textView_bedAMPM.getText().toString();
+        String wakeTime = editText_wakeTime.getText().toString();
+        String wakeAMPM = textView_wakeAMPM.getText().toString();
+        double duration = getDurationInHr(bedAMPM,bedTime, wakeAMPM,wakeTime);
+
+        // get desired wake up / reminder stat preferences
+        SharedPreferences preferences = getSharedPreferences(SetupActivity.PREFS_NAME, 0);
+        String wantedWakeTime = preferences.getString(SetupActivity.PREF_KEY_WANTED_WAKE_TIME, "6:00");
+        String wantedWakeAMPM = preferences.getString(SetupActivity.PREF_KEY_WANTED_WAKE_AMPM, "AM");
+        String wantedSleepTime = preferences.getString(SetupActivity.PREF_KEY_REMIND_TIME, "10:00");
+        String wantedSleepAMPM = preferences.getString(SetupActivity.PREF_KEY_REMIND_AMPM, "PM");
+        double wantedDuration=getDurationInHr(wantedSleepAMPM,wantedSleepTime,wantedWakeAMPM,wantedWakeTime);
+
+        Log.d("katsu", wantedWakeTime);
+
+
+
+        // DATABASE
+
+
+
+        // OLD
+        /*
         String filename = "SleepRecord";
         String record = ""+ calendar.get(Calendar.YEAR) + " " + calendar.get(Calendar.MONTH) + " "
                 + calendar.get(Calendar.DATE)+ " ";
-        EditText bedtime = (EditText) findViewById(R.id.editText_bedT);
-        record = record + bedtime.getText().toString() + " ";
-        EditText waketime = (EditText) findViewById(R.id.editText_wakeT);
-        record = record + waketime.getText().toString()+ "\n";
+
+
+
+        record = record + editText_bedTime.getText().toString() + " " + textView_bedAMPM.getText().toString() + " "
+                + editText_wakeTime.getText().toString()+ " "+ textView_wakeAMPM.getText().toString() + "\n";
 
         FileOutputStream fos = null;
         try {
@@ -84,9 +137,69 @@ public class RecordSleepActivity extends AppCompatActivity {
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
+        */
+        // END OLD
+
+    }
+
+    // Return sleep duration in hour unit
+    private double getDurationInHr(String sleepAMPM, String sleepTime, String wakeAMPM, String wakeTime){
+        double duration=0;
+
+        // Extract hr and min from sleepTime String
+        int sleepHr =0;
+        int sleepMin=0;
+        if (sleepTime.contains(":")) {
+            sleepHr = Integer.parseInt(sleepTime.substring(0, sleepTime.indexOf(":")));
+            if (sleepTime.length()>3) {
+                sleepMin = Integer.parseInt(sleepTime.substring(sleepTime.indexOf(":") + 1));
+            }
+        }else{
+            sleepHr = Integer.parseInt(sleepTime);
+        }
+
+        // Extract hr and min from wakeTime String
+        int wakeHr=0;
+        int wakeMin=0;
+        if (wakeTime.contains(":")) {
+            wakeHr = Integer.parseInt(wakeTime.substring(0, wakeTime.indexOf(":")));
+            if (wakeTime.length()>3) {
+                wakeMin = Integer.parseInt(wakeTime.substring(wakeTime.indexOf(":") + 1));
+            }
+        }else{
+            wakeHr = Integer.parseInt(wakeTime);
+        }
+
+        // calculate duration
+        if(sleepAMPM.equals(wakeAMPM)){
+            // case1: went to sleep past midnight and wake up before noon next day
+            // case2: went to sleep before midnight and wake up before midnight
+            duration = (double)((wakeHr*60+wakeMin) - (sleepHr*60+sleepMin)) / 60;
+        }else if (sleepAMPM.equals("PM") && wakeAMPM.equals("AM")){
+            // case3: went to sleep at evening/night before 12 and wake up before noon next day
+            duration = (double)(((12-sleepHr)*60 - sleepMin) + wakeHr*60+wakeMin) / 60;
+        }else if (sleepAMPM.equals("AM") && wakeAMPM.equals("PM")){
+            // case4: went to sleep past midnight and wake up in the afternoon
+            duration = (double)(((wakeHr+12)*60+wakeMin) - (sleepHr*60+sleepMin)) / 60;
+        }
 
 
+        return duration;
+    }
 
+    // Toggle AM/PM text for TextView view
+    public void toggleAMPM(View view) {
+        TextView tvAMPM = (TextView) view;
+        String currentText = tvAMPM.getText().toString();
+        if(currentText.equals("AM")){
+            tvAMPM.setText("PM");
+        }else{
+            tvAMPM.setText("AM");
+        }
+    }
 
+    public void showDuration(View view) {
+        double duration = getDurationInHr(textView_bedAMPM.getText().toString(), editText_bedTime.getText().toString(), textView_wakeAMPM.getText().toString(), editText_wakeTime.getText().toString());
+        ((TextView)findViewById(R.id.textView_duration)).setText(String.format("%.2f", duration));
     }
 }
