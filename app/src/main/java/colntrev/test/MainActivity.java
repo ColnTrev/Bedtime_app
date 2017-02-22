@@ -15,19 +15,6 @@ public class MainActivity extends AppCompatActivity {
         // Thy!
     }
 
-    public void toSetup(View view){
-        Intent intent = new Intent(this, SetupActivity.class);
-        startActivity(intent);
-
-
-    }
-
-    public void toRecordSleep(View view) {
-        Intent intent = new Intent(this, RecordSleepActivity.class);
-        startActivity(intent);
-
-    }
-
     public void goAnalyze(View view) {
         Intent analyze = new Intent(this,AnalyzeActivity.class);
         startActivity(analyze);
