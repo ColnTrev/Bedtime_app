@@ -65,6 +65,9 @@ public class TrendActivity extends AppCompatActivity {
         graph.getViewport().setMinY(DEFAULT_SLEEP_MIN);
         graph.getViewport().setMaxY(DEFAULT_SLEEP_MAX);
         graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMinX(DEFAULT_SLEEP_MIN);
+        graph.getViewport().setMaxX(DEFAULT_SLEEP_MAX);
+        graph.getViewport().setXAxisBoundsManual(true);
         //graph.getViewport().setScrollable(true); DO IN BETA
         series.setTitle("Expected Sleep");
         series2.setTitle("Actual Sleep");
