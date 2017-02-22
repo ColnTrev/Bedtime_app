@@ -37,11 +37,11 @@
             android:id="@+id/button_wakeUp"
             android:paddingRight="20dp"
             android:checked="true" />
-        <RadioButton
-            android:text="--"
+        <!--<RadioButton
+            android:text="&#45;&#45;"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button_sleep" />
+            android:id="@+id/button_sleep" />-->
     </RadioGroup>
 
     <TextView
@@ -157,6 +157,17 @@
         android:layout_below="@+id/editText_setTime"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="Test db"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_setReminder"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp"
+        android:id="@+id/button_db"
+        android:onClick="testDb" />
 
 
 </RelativeLayout>
