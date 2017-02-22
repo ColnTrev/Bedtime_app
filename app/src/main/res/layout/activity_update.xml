@@ -31,7 +31,7 @@
         android:id="@+id/newItemAdd" />
 
     <Button
-        android:text="Add Item"
+        android:text="SAVE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/newItemAdd"
@@ -41,4 +41,15 @@
         android:layout_marginEnd="14dp"
         android:id="@+id/addBtn"
         android:onClick="addNewItem" />
+
+    <TextView
+        android:text="What did you do before sleeping?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:id="@+id/textView4" />
 </RelativeLayout>

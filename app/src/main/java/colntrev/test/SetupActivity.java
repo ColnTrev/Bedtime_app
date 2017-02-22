@@ -25,15 +25,17 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class SetupActivity extends AppCompatActivity {
+    static final String PREFS_NAME = "Preferences";
     static final String PREF_KEY_WANTED_WAKE_TIME = "wantedWakeTime";
     static final String PREF_KEY_WANTED_WAKE_AMPM = "wantedWakeTimeAMPM";
     static final String PREF_KEY_REMIND_TIME = "remindTime";
     static final String PREF_KEY_REMIND_AMPM = "remindTimeAMPM";
     static final String PREF_KEY_REMIND_IS_ON ="remindIsOn";
-    static final String PREFS_NAME = "Preferences";
+    static final String PREF_KEY_ROWID="rowId";
 
     private final static int REMINDER_REQUEST_CODE = 54321;
     private EditText editText_wantedWakeTime, editText_remindTime;
@@ -78,6 +80,14 @@ public class SetupActivity extends AppCompatActivity {
         editText_remindTime.setText(preferences.getString(PREF_KEY_REMIND_TIME, "10:00"));
         textView_remindAMPM.setText(preferences.getString(PREF_KEY_REMIND_AMPM, "PM"));
 */
+
+        Button recTime1 = (Button) findViewById(R.id.button_rec1);
+        recTime1.setText("10:15");
+        Button recTime2 = (Button) findViewById(R.id.button_rec2);
+        recTime2.setText("11:45");
+        Button recTime3 = (Button) findViewById(R.id.button_rec3);
+        recTime3.setText("1:15");
+
 
         Log.d("katsu", preferences.getString(PREF_KEY_WANTED_WAKE_TIME, "6:00"));
         editText_wantedWakeTime.setText(preferences.getString(PREF_KEY_WANTED_WAKE_TIME, "6:00"));
@@ -330,5 +340,19 @@ public class SetupActivity extends AppCompatActivity {
     }
 
 
+    public void testDb(View view) {
+        SleepRecordDataSource datasource = new SleepRecordDataSource(this);
+        datasource.open();
 
+        ArrayList<SleepEntry> sleepEntries = new ArrayList<>();
+        datasource.getAllSleepEntries(sleepEntries);
+
+        ArrayList<String> topAct = new ArrayList<>();
+        datasource.getTopActivities(topAct);
+
+
+        datasource.close();
+
+
+    }
 }
