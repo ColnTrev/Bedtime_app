@@ -81,6 +81,14 @@ public class SetupActivity extends AppCompatActivity {
         textView_remindAMPM.setText(preferences.getString(PREF_KEY_REMIND_AMPM, "PM"));
 */
 
+        Button recTime1 = (Button) findViewById(R.id.button_rec1);
+        recTime1.setText("10:15");
+        Button recTime2 = (Button) findViewById(R.id.button_rec2);
+        recTime2.setText("11:45");
+        Button recTime3 = (Button) findViewById(R.id.button_rec3);
+        recTime3.setText("1:15");
+
+
         Log.d("katsu", preferences.getString(PREF_KEY_WANTED_WAKE_TIME, "6:00"));
         editText_wantedWakeTime.setText(preferences.getString(PREF_KEY_WANTED_WAKE_TIME, "6:00"));
         textView_wantedWakeAMPM.setText(preferences.getString(PREF_KEY_WANTED_WAKE_AMPM, "AM"));
