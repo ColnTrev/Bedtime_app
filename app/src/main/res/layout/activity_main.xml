@@ -11,54 +11,6 @@
     tools:context="colntrev.test.MainActivity">
 
     <Button
-        android:text="@string/View"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/viewLogBtn"
-        android:layout_below="@+id/tipsBtn"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="goUpdate"/>
-
-    <Button
-        android:text="@string/Tips"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tipsBtn"
-        android:layout_below="@+id/trendBtn"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="goTips"/>
-
-    <Button
-        android:text="@string/ViewTrend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/trendBtn"
-        android:layout_below="@+id/settingsBtn"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="goTrend"/>
-
-    <Button
-        android:text="@string/Analyze"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/anaLogBtn"
-        android:layout_below="@+id/viewLogBtn"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="goAnalyze" />
-
-    <Button
         android:text="@string/Settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -74,11 +26,59 @@
         android:text="Record Sleep"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/anaLogBtn"
         android:id="@+id/recSleepBtn"
+        android:onClick="goRecordSleep"
+        android:layout_below="@+id/settingsBtn"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="@string/View"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/viewLogBtn"
+        android:onClick="goUpdate"
+        android:layout_below="@+id/recSleepBtn"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="@string/Analyze"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/anaLogBtn"
+        android:onClick="goAnalyze"
+        android:layout_below="@+id/viewLogBtn"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="@string/ViewTrend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/trendBtn"
+        android:onClick="goTrend"
+        android:layout_below="@+id/anaLogBtn"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:onClick="goRecordSleep" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="@string/Tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tipsBtn"
+        android:onClick="goTips"
+        android:layout_below="@+id/trendBtn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
