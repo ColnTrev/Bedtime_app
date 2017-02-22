@@ -122,7 +122,8 @@ public class SleepRecordDataSource {
         }
 
         // get percentages
-        String queryPercent = "SELECT count(*), " +  dbHelper.COL_ACTIVITY +" FROM "+ dbHelper.TABLE_NAME+" GROUP BY "+dbHelper.COL_ACTIVITY
+        String queryPercent = "SELECT count(*), " +  dbHelper.COL_ACTIVITY +" FROM "+ dbHelper.TABLE_NAME+ " WHERE "+
+                dbHelper.COL_REAL_DURATION + "< 8 "+" GROUP BY "+dbHelper.COL_ACTIVITY
                 + " ORDER BY count(*) DESC;";
         Cursor cursor2 = database.rawQuery(queryPercent,selectionArg);
 
