@@ -11,43 +11,55 @@ import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.ArrayList;
+
 public class TrendActivity extends AppCompatActivity {
     LineGraphSeries<DataPoint> series, series2;
     static final int DEFAULT_SLEEP_MAX = 14;
     static final int DEFAULT_SLEEP_MIN = 0;
-    //ArrayList<Object> dbSet = new ArrayList<>();
-    //DatabaseHelper db = new DatabaseHelper();
+    private SleepRecordDataSource datasource;
+    ArrayList<SleepEntry> dbSet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trend);
-        //dbSet = new ArrayList<>();
-        //db = new DatabaseHelper();
+        dbSet = new ArrayList<>();
+        datasource = new SleepRecordDataSource(this);
+        datasource.open();
+        datasource.getAllSleepEntries(dbSet);
         graph();
     }
 
     public void graph(){
-        double x, y;
+        double y;
         GraphView graph = (GraphView) findViewById(R.id.graph);
         GridLabelRenderer labels = graph.getGridLabelRenderer();
         series = new LineGraphSeries<>();
         series2 = new LineGraphSeries<>();
         series.setColor(Color.RED);
         series2.setColor(Color.GREEN);
-        // Todo iterate over arraylist and graph both lines
-        for(int i = 1; i < 8; i++){
-            series.appendData(new DataPoint(i,8), true, 10);
-        }
-        for(int i = 1; i < 8; i++) {
-            if(i == 5){
-                y = 4;
-            } else if(i > 5) {
-                y = i + 2;
-            } else {
-                y = i + 1;
+
+        if(dbSet.isEmpty()){
+            for(int i = 1; i < 8; i++){
+                series.appendData(new DataPoint(i,8), true, 10);
             }
-            series2.appendData(new DataPoint(i,y), true,10);
+            for(int i = 1; i < 8; i++) {
+                if (i == 5) {
+                    y = 4;
+                } else if (i > 5) {
+                    y = i + 2;
+                } else {
+                    y = i + 1;
+                }
+                series2.appendData(new DataPoint(i, y), true, 10);
+            }
+        } else {
+            for(SleepEntry se : dbSet){
+                series.appendData(new DataPoint(new Long(se.getId()).doubleValue(),se.getWantedDuration()), true, 10);
+                series2.appendData(new DataPoint(new Long(se.getId()).doubleValue(), se.getRealDuration()), true, 10);
+            }
         }
+
         graph.addSeries(series);
         graph.addSeries(series2);
         graph.getViewport().setMinY(DEFAULT_SLEEP_MIN);
@@ -68,5 +80,23 @@ public class TrendActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_trend, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onResume() {
+        datasource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        datasource.close();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        datasource.close();
+        super.onDestroy();
     }
 }
