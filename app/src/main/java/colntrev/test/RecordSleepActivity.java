@@ -3,11 +3,13 @@
 
 package colntrev.test;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -19,6 +21,8 @@ import java.io.InputStreamReader;
 import java.util.Calendar;
 
 public class RecordSleepActivity extends AppCompatActivity {
+    private SleepRecordDataSource datasource;
+
     private Calendar calendar;
     private EditText editText_bedTime;
     private TextView textView_bedAMPM;
@@ -30,12 +34,32 @@ public class RecordSleepActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_sleep);
         calendar = Calendar.getInstance();
+        datasource = new SleepRecordDataSource(this);
+        datasource.open();
 
         editText_bedTime = (EditText) findViewById(R.id.editText_bedT);
         textView_bedAMPM = (TextView) findViewById(R.id.textView_bedAMPM);
         editText_wakeTime = (EditText) findViewById(R.id.editText_wakeT);
         textView_wakeAMPM = (TextView) findViewById(R.id.textView_wakeAMPM);
 
+    }
+
+    @Override
+    protected void onResume() {
+        datasource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        datasource.close();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        datasource.close();
+        super.onDestroy();
     }
 
     public void setWakeTimeToNow(View view) {
@@ -76,45 +100,67 @@ public class RecordSleepActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        TextView textView_test = (TextView) findViewById(R.id.textView_record);
-        textView_test.setText(sb.toString());
+        //TextView textView_test = (TextView) findViewById(R.id.textView_record);
+        //textView_test.setText(sb.toString());
 
 
     }
 
     // Record sleep statistics when user click "SAVE"
     public void recordSleepTime(View view) {
-        // Load SharedPreference for wantedSleep/Wake stats
-        // DB: use auto increment key because of case where 2 sleeps occur within same date
-        // eg: sleep AM wake up AM, go to sleep PM but wake up still PM same date
-        // Use calendar to get today's date
+        Button btn = (Button) view;
+        String btnText = btn.getText().toString().toUpperCase();
+
+        if (btnText.equals("SAVE")) {
+
+            // Load SharedPreference for wantedSleep/Wake stats
+            // DB: use auto increment key because of case where 2 sleeps occur within same date
+            // eg: sleep AM wake up AM, go to sleep PM but wake up still PM same date
+            // Use calendar to get today's date
 
 
-        // get date
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int date = calendar.get(Calendar.DATE);
+            // get date
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int date = calendar.get(Calendar.DATE);
+            String fullDate = "" + year + " " + month + " " + date;
 
-        // get actual wake up / sleep stat
-        String bedTime = editText_bedTime.getText().toString();
-        String bedAMPM = textView_bedAMPM.getText().toString();
-        String wakeTime = editText_wakeTime.getText().toString();
-        String wakeAMPM = textView_wakeAMPM.getText().toString();
-        double duration = getDurationInHr(bedAMPM,bedTime, wakeAMPM,wakeTime);
+            // get actual wake up / sleep stat
+            String bedTime = editText_bedTime.getText().toString();
+            String bedAMPM = textView_bedAMPM.getText().toString();
+            String wakeTime = editText_wakeTime.getText().toString();
+            String wakeAMPM = textView_wakeAMPM.getText().toString();
+            double duration = getDurationInHr(bedAMPM, bedTime, wakeAMPM, wakeTime);
 
-        // get desired wake up / reminder stat preferences
-        SharedPreferences preferences = getSharedPreferences(SetupActivity.PREFS_NAME, 0);
-        String wantedWakeTime = preferences.getString(SetupActivity.PREF_KEY_WANTED_WAKE_TIME, "6:00");
-        String wantedWakeAMPM = preferences.getString(SetupActivity.PREF_KEY_WANTED_WAKE_AMPM, "AM");
-        String wantedSleepTime = preferences.getString(SetupActivity.PREF_KEY_REMIND_TIME, "10:00");
-        String wantedSleepAMPM = preferences.getString(SetupActivity.PREF_KEY_REMIND_AMPM, "PM");
-        double wantedDuration=getDurationInHr(wantedSleepAMPM,wantedSleepTime,wantedWakeAMPM,wantedWakeTime);
+            // get desired wake up / reminder stat preferences
+            SharedPreferences preferences = getSharedPreferences(SetupActivity.PREFS_NAME, 0);
+            String wantedWakeTime = preferences.getString(SetupActivity.PREF_KEY_WANTED_WAKE_TIME, "6:00");
+            String wantedWakeAMPM = preferences.getString(SetupActivity.PREF_KEY_WANTED_WAKE_AMPM, "AM");
+            String wantedSleepTime = preferences.getString(SetupActivity.PREF_KEY_REMIND_TIME, "10:00");
+            String wantedSleepAMPM = preferences.getString(SetupActivity.PREF_KEY_REMIND_AMPM, "PM");
+            double wantedDuration = getDurationInHr(wantedSleepAMPM, wantedSleepTime, wantedWakeAMPM, wantedWakeTime);
 
-        Log.d("katsu", wantedWakeTime);
+            long rowID = datasource.addSleepEntry(fullDate, duration, wantedDuration, "");
+
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putLong(SetupActivity.PREF_KEY_ROWID, rowID);
+            editor.commit();
+
+
+            Log.d("katsu", "added to db @ row " + rowID);
+            btn.setText("RECORD NIGHT ACTIVITY");
+
+        }else{
+            Intent intent = new Intent(this, UpdateActivity.class);
+            startActivity(intent);
+
+        }
+
+
+        // DATABASE INSERT
 
 
 
-        // DATABASE
 
 
 
@@ -171,6 +217,7 @@ public class RecordSleepActivity extends AppCompatActivity {
         }
 
         // calculate duration
+        // case not covered: went to sleep before noon and wake up afternoon SAME DAY
         if(sleepAMPM.equals(wakeAMPM)){
             // case1: went to sleep past midnight and wake up before noon next day
             // case2: went to sleep before midnight and wake up before midnight
