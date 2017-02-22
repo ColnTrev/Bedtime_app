@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Bedtime</string>
     <string name="Settings">Set Reminder</string>
-    <string name="ViewTrend">View Trend</string>
-    <string name="Analyze">Analyze Logs</string>
-    <string name="View">Update Log</string>
+    <string name="ViewTrend">View Sleep Trend</string>
+    <string name="Analyze">Analyze Activities</string>
+    <string name="View">Record Activities</string>
     <string name="Tips">Sleep Tips</string>
     <string name="title_activity_analyze">AnalyzeActivity</string>
     <string name="MainMenu">Back to Main Menu</string>

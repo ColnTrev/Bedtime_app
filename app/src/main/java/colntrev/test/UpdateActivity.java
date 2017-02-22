@@ -6,9 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -56,6 +58,15 @@ public class UpdateActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<String>(this, R.layout.items, items);
         ListView list = (ListView) findViewById(R.id.logList);
         list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String item = ((TextView)view).getText().toString();
+                EditText et = (EditText) findViewById(R.id.newItemAdd);
+                et.setText(item);
+            }
+        });
     }
 
     public void addNewItem(View view) {
