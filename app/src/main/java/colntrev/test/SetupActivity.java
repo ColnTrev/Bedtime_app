@@ -310,8 +310,17 @@ public class SetupActivity extends AppCompatActivity {
     public void onSuggestedTimeClick(View view) {
 
         String chosenTime = ((RadioButton)view).getText().toString();
-        if (!chosenTime.equals("--:--"))
+        if (!chosenTime.equals("--:--")) {
             editText_remindTime.setText(chosenTime);
+            int hr = Integer.parseInt(chosenTime.substring(0,chosenTime.indexOf(":")));
+            // Just simplifying things for user. Not best solution.
+            if(hr < 6){
+                textView_remindAMPM.setText("AM");
+            }else{
+                textView_remindAMPM.setText("PM");
+            }
+        }
+
 
     }
 
@@ -354,5 +363,15 @@ public class SetupActivity extends AppCompatActivity {
         datasource.close();
 
 
+    }
+
+    public void toggleAMPM(View view) {
+        TextView tvAMPM = (TextView) view;
+        String currentText = tvAMPM.getText().toString();
+        if(currentText.equals("AM")){
+            tvAMPM.setText("PM");
+        }else{
+            tvAMPM.setText("AM");
+        }
     }
 }
