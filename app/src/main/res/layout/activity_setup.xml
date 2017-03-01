@@ -11,7 +11,7 @@
     tools:context="colntrev.test.SetupActivity">
 
     <TextView
-        android:text="I want to:"
+        android:text="Wake me up at:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView_wakeUp"
@@ -20,7 +20,7 @@
         android:layout_alignParentStart="true"
         android:textSize="18sp" />
 
-    <RadioGroup
+    <!--<RadioGroup
         android:id="@+id/radioGrp_wakeSleep"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,21 +37,23 @@
             android:id="@+id/button_wakeUp"
             android:paddingRight="20dp"
             android:checked="true" />
-        <!--<RadioButton
+        &lt;!&ndash;<RadioButton
             android:text="&#45;&#45;"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button_sleep" />-->
-    </RadioGroup>
+            android:id="@+id/button_sleep" />&ndash;&gt;
+    </RadioGroup>-->
 
     <TextView
         android:text="AM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/radioGrp_wakeSleep"
+        android:layout_below="@+id/textView_wakeUp"
         android:layout_alignBaseline="@+id/editText_time1"
         android:id="@+id/textView_AMPM"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:onClick="toggleAMPM" />
+
 
     <EditText
         android:id="@+id/editText_time1"
@@ -60,15 +62,27 @@
         android:layout_height="wrap_content"
         android:inputType="time"
         android:ems="10"
-        android:layout_below="@+id/radioGrp_wakeSleep"
+        android:layout_below="@+id/textView_wakeUp"
         android:layout_toRightOf="@id/textView_AMPM"
         android:hint="00:00"
          />
 
 
+
+<!--    <TimePicker
+        android:layout_height="105dp"
+        android:scaleX="0.70"
+        android:scaleY="0.70"
+        android:timePickerMode="spinner"
+        android:id="@+id/timePicker_wake"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/textView_wakeUp"
+
+        />-->
+
     <TextView
         android:id="@+id/textView_rec"
-        android:text="Suggested bedtime to avoid grogginess:"
+        android:text="(Optional) Suggested bedtime to wake up during light sleep:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editText_time1"
@@ -144,30 +158,56 @@
         android:layout_alignParentStart="true"
         android:layout_alignBaseline="@+id/editText_setTime"
         android:id="@+id/textView_AMPM2"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:onClick="toggleAMPM"/>
 
 
-    <Button
+    <!--<Button
         android:text="Reminder: OFF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:id="@+id/button_setReminder"
         android:onClick="onClickRemindButton"
-        android:layout_below="@+id/editText_setTime"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignTop="@+id/editText_setTime"
+        android:layout_toRightOf="@+id/textView_wakeUp"
+        android:layout_toEndOf="@+id/textView_wakeUp" />
 
     <Button
-        android:text="Test db"
+        android:text="Alarm: OFF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button_setReminder"
+        android:id="@+id/button_wakeAlarm"
+        android:layout_alignTop="@+id/editText_time1"
+        android:layout_centerHorizontal="true" />
+-->
+    <Switch
+        android:text="off"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView_AMPM"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/switch_wake" />
+
+    <Button
+        android:text="Save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_db"
+        android:onClick="onClickSave"
+        android:layout_below="@+id/editText_setTime"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="16dp"
-        android:id="@+id/button_db"
-        android:onClick="testDb" />
+        android:layout_marginTop="17dp" />
+
+    <Switch
+        android:text="off"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView_AMPM2"
+        android:layout_alignRight="@+id/switch_wake"
+        android:layout_alignEnd="@+id/switch_wake"
+        android:id="@+id/switch_sleep" />
 
 
 </RelativeLayout>

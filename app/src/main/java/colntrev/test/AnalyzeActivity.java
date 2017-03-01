@@ -20,11 +20,11 @@ public class AnalyzeActivity extends AppCompatActivity {
         ArrayList<String> topActivities = new ArrayList<>();
         datasource.getTopActivities(topActivities);
         TextView textView = (TextView) findViewById(R.id.displayText);
-        String displayStr = "The past nights where you got less than 8 hours of sleep you were:";
+        String displayStr = "The past nights where you got less than 8 hours of sleep you were:\n";
         for (String se : topActivities){
-            displayStr += se + " " ;
+            displayStr += se + " \n" ;
         }
-        displayStr += ".";
+
         textView.setText(displayStr);
 
     }

@@ -33,6 +33,10 @@
             android:name=".ReminderService"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name=".WakeAlarmService"
+            android:enabled="true"
+            android:exported="true" />
 
         <activity android:name=".TipsActivity"></activity>
     </application>
