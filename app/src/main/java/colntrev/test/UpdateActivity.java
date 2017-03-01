@@ -21,7 +21,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class UpdateActivity extends AppCompatActivity {
-    ArrayList<String> items; // This list will get the previous list view contents and reload them
+    ArrayList<SleepEntry> items; // This list will get the previous list view contents and reload them
     ArrayAdapter<String> adapter;
 
     // Thy: for database
@@ -39,7 +39,7 @@ public class UpdateActivity extends AppCompatActivity {
         // add items from database in "<frequency> <activity>" format
         datasource = new SleepRecordDataSource(this);
         datasource.open();
-        datasource.getAllActivities(items);
+        datasource.getAllSleepEntries(items);
 
 
         populateLog();
@@ -49,16 +49,17 @@ public class UpdateActivity extends AppCompatActivity {
 
     private void populateLog(){
 
-        // default items
-        items.add("Bluetooth Games");
-        items.add("Waiting on my food to be delivered");
-        items.add("Trying to donate food");
-        items.add("Playing Robert's shape game");
-
-        adapter = new ArrayAdapter<String>(this, R.layout.items, items);
-        ListView list = (ListView) findViewById(R.id.logList);
-        list.setAdapter(adapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        ArrayList<String> list = new ArrayList<>();
+        for(SleepEntry se : items){
+            String entry = se.getActivity();
+            if(!("".equals(entry)) && !list.contains(entry)){
+                list.add(entry);
+            }
+        }
+        adapter = new ArrayAdapter<String>(this, R.layout.items, list);
+        ListView lst = (ListView) findViewById(R.id.logList);
+        lst.setAdapter(adapter);
+        lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -72,7 +73,9 @@ public class UpdateActivity extends AppCompatActivity {
     public void addNewItem(View view) {
         EditText newItem = (EditText) findViewById(R.id.newItemAdd);
         String text = newItem.getText().toString();
-        adapter.add(text); // adding new item to list view
+        if(adapter.getPosition(text) == -1) {
+            adapter.add(text); // adding new item to list view
+        }
 
 
         // Thy: update database entry
@@ -80,9 +83,9 @@ public class UpdateActivity extends AppCompatActivity {
         long rowID = preferences.getLong(SetupActivity.PREF_KEY_ROWID, -1);
         if (rowID > -1) {
             int num = datasource.updateSleepEntry(rowID, text);
-            Log.d("miso", "updated for row "+rowID+" num="+num);
+            Log.d("addNewItem", "updated for row "+rowID+" num="+num);
         }else{
-            Log.d("miso", "bad rowid");
+            Log.d("addNewItem", "bad rowid");
         }
     }
 
