@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +32,8 @@ public class RecordSleepActivity extends AppCompatActivity {
     private EditText editText_wakeTime;
     private TextView textView_wakeAMPM;
 
+    private boolean okToSave_sleepT, okToSave_wakeT;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +47,84 @@ public class RecordSleepActivity extends AppCompatActivity {
         editText_wakeTime = (EditText) findViewById(R.id.editText_wakeT);
         textView_wakeAMPM = (TextView) findViewById(R.id.textView_wakeAMPM);
 
+        okToSave_sleepT = false;
+        okToSave_wakeT= false;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        editText_bedTime.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String timeInput = editText_bedTime.getText().toString();
+                //Log.d(TAG, timeInput);
+                if (timeInput.length() > 0 && timeInput.charAt(0) != ':') {
+                    String[] hrMin = timeInput.split(":");
+                    int hour = Integer.parseInt(hrMin[0]);
+                    int minute = 0;
+                    if (hrMin.length > 1)
+                        minute = Integer.parseInt(hrMin[1]);
+                    if (hour > 12 || minute > 59) {
+                        //okToProceed = false;
+                        okToSave_sleepT=false;
+                        editText_bedTime.setError("00:00 to 12:59 only");
+                    }else{
+                        okToSave_sleepT = true;
+                        //okToProceed=true;
+                    }
+                }else{
+                    okToSave_sleepT = false;
+                }
+
+            }
+        });
+
+        editText_wakeTime.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String timeInput = editText_wakeTime.getText().toString();
+                //Log.d(TAG, timeInput);
+                if (timeInput.length() > 0 && timeInput.charAt(0) != ':') {
+                    String[] hrMin = timeInput.split(":");
+                    int hour = Integer.parseInt(hrMin[0]);
+                    int minute = 0;
+                    if (hrMin.length > 1)
+                        minute = Integer.parseInt(hrMin[1]);
+                    if (hour > 12 || minute > 59) {
+                        //okToProceed = false;
+                        okToSave_wakeT = false;
+                        editText_wakeTime.setError("00:00 to 12:59 only");
+                    }else{
+                        okToSave_wakeT = true;
+                        //okToProceed=true;
+                    }
+                }else{
+                    okToSave_wakeT = false;
+                }
+            }
+        });
     }
 
     @Override
@@ -118,49 +200,52 @@ public class RecordSleepActivity extends AppCompatActivity {
         String btnText = btn.getText().toString().toUpperCase();
 
         if (btnText.equals("SAVE")) {
-
-            // Load SharedPreference for wantedSleep/Wake stats
-            // DB: use auto increment key because of case where 2 sleeps occur within same date
-            // eg: sleep AM wake up AM, go to sleep PM but wake up still PM same date
-            // Use calendar to get today's date
-
-
-            // get date
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int date = calendar.get(Calendar.DATE);
-            String fullDate = "" + year + " " + month + " " + date;
-
-            // get actual wake up / sleep stat
-            String bedTime = editText_bedTime.getText().toString();
-            String bedAMPM = textView_bedAMPM.getText().toString();
-            String wakeTime = editText_wakeTime.getText().toString();
-            String wakeAMPM = textView_wakeAMPM.getText().toString();
-            double duration = getDurationInHr(bedAMPM, bedTime, wakeAMPM, wakeTime);
-            if (duration<=0){
-                Toast.makeText(this,"Invalid time input", Toast.LENGTH_LONG).show();
-                btn.setError("Invalid time input");
+            if (okToSave_wakeT && okToSave_sleepT) {
+                // Load SharedPreference for wantedSleep/Wake stats
+                // DB: use auto increment key because of case where 2 sleeps occur within same date
+                // eg: sleep AM wake up AM, go to sleep PM but wake up still PM same date
+                // Use calendar to get today's date
 
 
-            }else {
+                // get date
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int date = calendar.get(Calendar.DATE);
+                String fullDate = "" + year + " " + month + " " + date;
 
-                // get desired wake up / reminder stat preferences
-                SharedPreferences preferences = getSharedPreferences(SetupActivity.PREFS_NAME, 0);
-                String wantedWakeTime = preferences.getString(SetupActivity.PREF_KEY_WANTED_WAKE_TIME, "6:00");
-                String wantedWakeAMPM = preferences.getString(SetupActivity.PREF_KEY_WANTED_WAKE_AMPM, "AM");
-                String wantedSleepTime = preferences.getString(SetupActivity.PREF_KEY_REMIND_TIME, "10:00");
-                String wantedSleepAMPM = preferences.getString(SetupActivity.PREF_KEY_REMIND_AMPM, "PM");
-                double wantedDuration = getDurationInHr(wantedSleepAMPM, wantedSleepTime, wantedWakeAMPM, wantedWakeTime);
-
-                long rowID = datasource.addSleepEntry(fullDate, duration, wantedDuration, "");
-
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong(SetupActivity.PREF_KEY_ROWID, rowID);
-                editor.commit();
+                // get actual wake up / sleep stat
+                String bedTime = editText_bedTime.getText().toString();
+                String bedAMPM = textView_bedAMPM.getText().toString();
+                String wakeTime = editText_wakeTime.getText().toString();
+                String wakeAMPM = textView_wakeAMPM.getText().toString();
+                double duration = getDurationInHr(bedAMPM, bedTime, wakeAMPM, wakeTime);
+                if (duration <= 0) {
+                    Toast.makeText(this, "Invalid time input", Toast.LENGTH_LONG).show();
+                    btn.setError("Invalid time input");
 
 
-                Log.d("katsu", "added to db @ row " + rowID);
-                btn.setText("RECORD NIGHT ACTIVITY");
+                } else {
+
+                    // get desired wake up / reminder stat preferences
+                    SharedPreferences preferences = getSharedPreferences(SetupActivity.PREFS_NAME, 0);
+                    String wantedWakeTime = preferences.getString(SetupActivity.PREF_KEY_WANTED_WAKE_TIME, "6:00");
+                    String wantedWakeAMPM = preferences.getString(SetupActivity.PREF_KEY_WANTED_WAKE_AMPM, "AM");
+                    String wantedSleepTime = preferences.getString(SetupActivity.PREF_KEY_REMIND_TIME, "10:00");
+                    String wantedSleepAMPM = preferences.getString(SetupActivity.PREF_KEY_REMIND_AMPM, "PM");
+                    double wantedDuration = getDurationInHr(wantedSleepAMPM, wantedSleepTime, wantedWakeAMPM, wantedWakeTime);
+
+                    long rowID = datasource.addSleepEntry(fullDate, duration, wantedDuration, "");
+
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putLong(SetupActivity.PREF_KEY_ROWID, rowID);
+                    editor.commit();
+
+
+                    Log.d("katsu", "added to db @ row " + rowID);
+                    btn.setText("RECORD NIGHT ACTIVITY");
+                }
+            }else{
+                Toast.makeText(this, "ERROR: Please use 00:00 to 12:59 time", Toast.LENGTH_LONG).show();
             }
 
         }else{
@@ -216,6 +301,12 @@ public class RecordSleepActivity extends AppCompatActivity {
         }else{
             sleepHr = Integer.parseInt(sleepTime);
         }
+        Log.d("katsu", "b correct" + sleepHr);
+        if(sleepHr == 12 && sleepAMPM.equals("AM")){
+            sleepHr = 0;
+
+        }
+        Log.d("katsu", "corrected" + sleepHr);
 
         // Extract hr and min from wakeTime String
         int wakeHr=0;
@@ -229,6 +320,10 @@ public class RecordSleepActivity extends AppCompatActivity {
             wakeHr = Integer.parseInt(wakeTime);
         }
 
+        if(wakeHr == 12 && wakeAMPM.equals("AM")){
+            wakeHr = 0;
+        }
+
         // calculate duration
         // case not covered: went to sleep before noon and wake up afternoon SAME DAY
         if(sleepAMPM.equals(wakeAMPM)){
@@ -240,6 +335,7 @@ public class RecordSleepActivity extends AppCompatActivity {
             duration = (double)(((12-sleepHr)*60 - sleepMin) + wakeHr*60+wakeMin) / 60;
         }else if (sleepAMPM.equals("AM") && wakeAMPM.equals("PM")){
             // case4: went to sleep past midnight and wake up in the afternoon
+
             duration = (double)(((wakeHr+12)*60+wakeMin) - (sleepHr*60+sleepMin)) / 60;
         }
 
@@ -259,7 +355,9 @@ public class RecordSleepActivity extends AppCompatActivity {
     }
 
     public void showDuration(View view) {
-        double duration = getDurationInHr(textView_bedAMPM.getText().toString(), editText_bedTime.getText().toString(), textView_wakeAMPM.getText().toString(), editText_wakeTime.getText().toString());
-        ((TextView)findViewById(R.id.textView_duration)).setText(String.format("%.2f", duration));
+        if (okToSave_sleepT && okToSave_wakeT) {
+            double duration = getDurationInHr(textView_bedAMPM.getText().toString(), editText_bedTime.getText().toString(), textView_wakeAMPM.getText().toString(), editText_wakeTime.getText().toString());
+            ((TextView) findViewById(R.id.textView_duration)).setText(String.format("%.2f", duration));
+        }
     }
 }

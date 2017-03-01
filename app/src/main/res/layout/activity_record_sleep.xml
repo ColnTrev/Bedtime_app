@@ -65,7 +65,7 @@
         android:inputType="time"
         android:ems="10"
         android:id="@+id/editText_bedT"
-        android:text="9:00"
+        android:hint="00:00"
         android:layout_toRightOf="@id/textView_bedAMPM"
         android:layout_below="@id/textView3"/>
 
@@ -80,6 +80,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/textView5"
         android:textSize="18sp"
+        android:hint="00:00"
         android:layout_alignLeft="@+id/textView3"
         android:layout_alignStart="@+id/textView3"
         android:layout_below="@id/editText_bedT" />
