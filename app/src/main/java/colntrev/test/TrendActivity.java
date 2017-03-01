@@ -8,13 +8,14 @@ import android.view.Menu;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.LegendRenderer;
+import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 
 public class TrendActivity extends AppCompatActivity {
-    LineGraphSeries<DataPoint> series, series2;
+    BarGraphSeries<DataPoint> series, series2;
     static final int DEFAULT_SLEEP_MAX = 14;
     static final int DEFAULT_SLEEP_MIN = 0;
     private SleepRecordDataSource datasource;
@@ -34,8 +35,8 @@ public class TrendActivity extends AppCompatActivity {
         double y;
         GraphView graph = (GraphView) findViewById(R.id.graph);
         GridLabelRenderer labels = graph.getGridLabelRenderer();
-        series = new LineGraphSeries<>();
-        series2 = new LineGraphSeries<>();
+        series = new BarGraphSeries<>();
+        series2 = new BarGraphSeries<>();
         series.setColor(Color.RED);
         series2.setColor(Color.GREEN);
 
@@ -71,8 +72,6 @@ public class TrendActivity extends AppCompatActivity {
         //graph.getViewport().setScrollable(true); DO IN BETA
         series.setTitle("Expected Sleep");
         series2.setTitle("Actual Sleep");
-        series.setDrawDataPoints(true);
-        series2.setDrawDataPoints(true);
         labels.setHorizontalAxisTitle("Number of Days");
         labels.setVerticalAxisTitle("Hours of Sleep");
         graph.getLegendRenderer().setVisible(true);

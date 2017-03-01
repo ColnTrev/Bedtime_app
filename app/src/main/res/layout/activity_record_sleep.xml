@@ -11,7 +11,8 @@
     tools:context="colntrev.test.RecordSleepActivity">
 
     <TextView
-        android:text="How did you sleep last night?"
+        android:text="Record your actual bed time and wake up time:"
+        android:textColor="@android:color/background_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -31,7 +32,8 @@
         android:textSize="14sp" />
 
     <TextView
-        android:text="Bed time"
+        android:text="Actual Bed time"
+        android:textColor="@android:color/background_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView_note"
@@ -45,6 +47,7 @@
 
     <TextView
         android:text="PM"
+        android:textColor="@android:color/background_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/textView5"
@@ -56,6 +59,7 @@
         android:onClick="toggleAMPM"/>
 
     <EditText
+        android:textColor="@android:color/background_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="time"
@@ -70,7 +74,8 @@
 
 
     <TextView
-        android:text="Wake time"
+        android:text="Actual wake up time"
+        android:textColor="@android:color/background_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView5"
@@ -84,6 +89,7 @@
 
 
     <EditText
+        android:textColor="@android:color/background_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="time"
@@ -96,6 +102,7 @@
         />
     <TextView
         android:text="AM"
+        android:textColor="@android:color/background_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textView5"
@@ -109,6 +116,7 @@
         android:onClick="toggleAMPM"/>
     <CheckBox
         android:text="Just now"
+        android:textColor="@android:color/background_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView5"
@@ -116,6 +124,7 @@
         android:layout_alignStart="@+id/textView_bedAMPM"
         android:id="@+id/checkBox"
         android:onClick="setWakeTimeToNow"/>
+
 
     <!--    <Button
         android:text="-&#45;&#45;&#45;&#45;&#45;&#45;"
@@ -131,6 +140,7 @@
 
     <TextView
         android:text="DURATION: click here"
+        android:textColor="@android:color/background_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/button_save"
@@ -142,6 +152,7 @@
 
     <Button
         android:text="SAVE"
+        style="?attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="recordSleepTime"
