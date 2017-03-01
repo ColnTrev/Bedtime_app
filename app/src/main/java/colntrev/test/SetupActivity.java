@@ -156,8 +156,10 @@ public class SetupActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 //boolean okToProceed = false;
                 String timeInput = editText_wantedWakeTime.getText().toString();
-                if (timeInput.length() > 0 ) {
+                if (timeInput.length() > 0 && timeInput.charAt(0) != ':') {
+
                     String[] hrMin = timeInput.split(":");
+
                     int hour = Integer.parseInt(hrMin[0]);
                     int minute = 0;
                     if (hrMin.length > 1)
@@ -168,6 +170,8 @@ public class SetupActivity extends AppCompatActivity {
                     }else{
                         okToSetAlarm=true;
                     }
+                }else{
+                    okToSetAlarm = false;
                 }
 
                 // to do : check for correct time input & in 00 or 00:00 format
@@ -282,7 +286,7 @@ public class SetupActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 String timeInput = editText_remindTime.getText().toString();
                 Log.d(TAG, timeInput);
-                if (timeInput.length() > 0 ) {
+                if (timeInput.length() > 0 && timeInput.charAt(0) != ':') {
                     String[] hrMin = timeInput.split(":");
                     int hour = Integer.parseInt(hrMin[0]);
                     int minute = 0;
@@ -296,6 +300,8 @@ public class SetupActivity extends AppCompatActivity {
                         okToSetReminder = true;
                         //okToProceed=true;
                     }
+                }else{
+                    okToSetReminder = false;
                 }
             }
         });
