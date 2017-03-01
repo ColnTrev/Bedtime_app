@@ -117,17 +117,7 @@
         android:id="@+id/checkBox"
         android:onClick="setWakeTimeToNow"/>
 
-    <Button
-        android:text="SAVE"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="recordSleepTime"
-        android:id="@+id/button_save" />
-
-<!--    <Button
+    <!--    <Button
         android:text="-&#45;&#45;&#45;&#45;&#45;&#45;"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -149,6 +139,17 @@
         android:layout_marginTop="18dp"
         android:id="@+id/textView_duration"
         android:onClick="showDuration"/>
+
+    <Button
+        android:text="SAVE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="recordSleepTime"
+        android:id="@+id/button_save"
+        android:layout_below="@+id/textView_wakeAMPM"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>
