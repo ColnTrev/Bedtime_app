@@ -32,7 +32,7 @@
         android:layout_marginTop="11dp"
         android:orientation="horizontal">
 
-        <!-- <RadioButton
+        <!- <RadioButton
             android:text="wake up at"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
