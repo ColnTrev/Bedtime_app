@@ -29,7 +29,8 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/textView_recQuest"
         android:id="@+id/textView_note"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:textColor="@color/colorPrimary"/>
 
     <TextView
         android:text="Actual Bed time"
@@ -65,7 +66,7 @@
         android:inputType="time"
         android:ems="10"
         android:id="@+id/editText_bedT"
-        android:text="9:00"
+        android:hint="00:00"
         android:layout_toRightOf="@id/textView_bedAMPM"
         android:layout_below="@id/textView3"/>
 
@@ -80,6 +81,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/textView5"
         android:textSize="18sp"
+        android:hint="00:00"
         android:layout_alignLeft="@+id/textView3"
         android:layout_alignStart="@+id/textView3"
         android:layout_below="@id/editText_bedT" />
@@ -95,7 +97,7 @@
         android:inputType="time"
         android:ems="10"
         android:id="@+id/editText_wakeT"
-        android:text="8:00"
+        android:hint="00:00"
         android:layout_below="@+id/checkBox"
         android:layout_alignLeft="@+id/editText_bedT"
         android:layout_alignStart="@+id/editText_bedT"
@@ -139,7 +141,7 @@
 
 
     <TextView
-        android:text="DURATION: click here"
+        android:text="Sleep Duration: click here"
         android:textColor="@android:color/background_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -160,7 +162,9 @@
         android:layout_below="@+id/textView_wakeAMPM"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"/>
 
 
 </RelativeLayout>

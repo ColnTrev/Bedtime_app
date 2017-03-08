@@ -24,8 +24,7 @@ public class ReminderService extends Service {
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
+    public int onStartCommand(Intent _intent, int flags, int startId) {
 
         Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
@@ -47,7 +46,14 @@ public class ReminderService extends Service {
                 .build();
         NotificationManager notifManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         notifManager.notify(1, mNotify);
+        return Service.START_NOT_STICKY;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
 
 
     }
+
 }

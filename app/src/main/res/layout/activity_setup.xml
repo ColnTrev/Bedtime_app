@@ -32,18 +32,18 @@
         android:layout_marginTop="11dp"
         android:orientation="horizontal">
 
-        <!- <RadioButton
+         <RadioButton
             android:text="wake up at"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/button_wakeUp"
             android:paddingRight="20dp"
             android:checked="true" />
-        &lt;!&ndash;<RadioButton
+        <RadioButton
             android:text="&#45;&#45;"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button_sleep" />&ndash;&gt;
+            android:id="@+id/button_sleep" />
     </RadioGroup>-->
 
     <TextView
@@ -199,6 +199,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/textView_AMPM"
         android:layout_centerHorizontal="true"
+        android:textColor="@color/colorAccent"
         android:id="@+id/switch_wake" />
 
     <Button
@@ -211,7 +212,9 @@
         android:layout_below="@+id/editText_setTime"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="17dp" />
+        android:layout_marginTop="17dp"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"/>
 
     <Switch
         android:text="off"
@@ -220,7 +223,8 @@
         android:layout_alignBottom="@+id/textView_AMPM2"
         android:layout_alignRight="@+id/switch_wake"
         android:layout_alignEnd="@+id/switch_wake"
-        android:id="@+id/switch_sleep" />
+        android:id="@+id/switch_sleep"
+        android:textColor="@color/colorAccent"/>
 
 
 </RelativeLayout>

@@ -12,12 +12,12 @@
 
     <TextView
         android:text="Some sleeping tips..."
+        android:textColor="@android:color/background_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/textView2"
-        android:textSize="16sp"
+        android:id="@+id/textView_tip"
          />
 </RelativeLayout>

@@ -58,6 +58,8 @@ public class SetupActivity extends AppCompatActivity {
     private TimePicker timePicker_wake;
     private TimePicker timePicker_sleep;
 
+    private PendingIntent pIntentSleep, pIntentWake;
+
     private boolean okToSetAlarm, okToSetReminder;
     private String TAG;
 
@@ -130,13 +132,15 @@ public class SetupActivity extends AppCompatActivity {
 
 
 
-        // Restore time preferences
+        // Display time preferences
         Log.d("katsu", preferences.getString(PREF_KEY_WANTED_WAKE_TIME, "6:00"));
         editText_wantedWakeTime.setText(preferences.getString(PREF_KEY_WANTED_WAKE_TIME, "6:00"));
         textView_wantedWakeAMPM.setText(preferences.getString(PREF_KEY_WANTED_WAKE_AMPM, "AM"));
         editText_remindTime.setText(preferences.getString(PREF_KEY_REMIND_TIME, "10:30"));
         textView_remindAMPM.setText(preferences.getString(PREF_KEY_REMIND_AMPM, "PM"));
 
+        okToSetReminder = true;
+        okToSetAlarm = true;
 
 
 
@@ -156,8 +160,10 @@ public class SetupActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 //boolean okToProceed = false;
                 String timeInput = editText_wantedWakeTime.getText().toString();
-                if (timeInput.length() > 0 ) {
+                if (timeInput.length() > 0 && timeInput.charAt(0) != ':') {
+
                     String[] hrMin = timeInput.split(":");
+
                     int hour = Integer.parseInt(hrMin[0]);
                     int minute = 0;
                     if (hrMin.length > 1)
@@ -168,6 +174,8 @@ public class SetupActivity extends AppCompatActivity {
                     }else{
                         okToSetAlarm=true;
                     }
+                }else{
+                    okToSetAlarm = false;
                 }
 
                 // to do : check for correct time input & in 00 or 00:00 format
@@ -282,7 +290,7 @@ public class SetupActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 String timeInput = editText_remindTime.getText().toString();
                 Log.d(TAG, timeInput);
-                if (timeInput.length() > 0 ) {
+                if (timeInput.length() > 0 && timeInput.charAt(0) != ':') {
                     String[] hrMin = timeInput.split(":");
                     int hour = Integer.parseInt(hrMin[0]);
                     int minute = 0;
@@ -296,9 +304,12 @@ public class SetupActivity extends AppCompatActivity {
                         okToSetReminder = true;
                         //okToProceed=true;
                     }
+                }else{
+                    okToSetReminder = false;
                 }
             }
         });
+
 
 
 
@@ -328,13 +339,23 @@ public class SetupActivity extends AppCompatActivity {
 
 
         // Set alarm to user's reminder time
-        if (amPm.equals("PM")&& remindHr<12){
+        /*if (amPm.equals("PM")&& remindHr<12){
             remindHr += 12; // convert to 24-hr format
-        }
+        }*/
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, remindHr);
+        calendar.set(Calendar.HOUR, remindHr);
         calendar.set(Calendar.MINUTE, remindMin);
+        calendar.set(Calendar.SECOND, 0);
+        //*** // FIX
+        if (amPm.equals("AM")){
+            calendar.set(Calendar.AM_PM, Calendar.AM);
+            Log.d(TAG, "AM");
+        }else{
+            calendar.set(Calendar.AM_PM,Calendar.PM);
+            Log.d(TAG, "PM");
+        }
+
         Intent intent;
         PendingIntent pendingIntent;
         if (requestCode == SLEEP_REMINDER_REQUEST_CODE) {
@@ -392,6 +413,7 @@ public class SetupActivity extends AppCompatActivity {
         // END OLD
     }
 
+    /*
     // TO DELETE LATER
     // Load default reminder time
     public void displayDefaultSetting(View view) {
@@ -428,7 +450,7 @@ public class SetupActivity extends AppCompatActivity {
         setTime.setText(sb.toString());
 
     }
-
+*/
 
     // Set reminder time input to user-selected suggested time
     public void onSuggestedTimeClick(View view) {
@@ -450,7 +472,7 @@ public class SetupActivity extends AppCompatActivity {
 
 
     }
-
+/*
     // If reminder is OFF, turn reminder ON.
     // If reminder is ON, turn reminder OFF.
     public void onClickRemindButton(View view) {
@@ -491,6 +513,7 @@ public class SetupActivity extends AppCompatActivity {
 
 
     }
+*/
 
     public void toggleAMPM(View view) {
         TextView tvAMPM = (TextView) view;
@@ -541,6 +564,7 @@ public class SetupActivity extends AppCompatActivity {
                         Intent reminderIntent = new Intent(this, WakeAlarmService.class);
                         PendingIntent pendingIntent = PendingIntent.getService(this, WAKE_ALARM_REQUEST_CODE, reminderIntent, 0);
                         alarmManager.cancel(pendingIntent);
+                        pendingIntent.cancel();
                         Log.d(TAG, "turn previous wake up alarm OFF");
                     }
                     // turn new wakeup alarm on
@@ -553,6 +577,7 @@ public class SetupActivity extends AppCompatActivity {
                 Intent reminderIntent = new Intent(this, WakeAlarmService.class);
                 PendingIntent pendingIntent = PendingIntent.getService(this, WAKE_ALARM_REQUEST_CODE, reminderIntent, 0);
                 alarmManager.cancel(pendingIntent);
+                pendingIntent.cancel();
                 Log.d(TAG,"turn wake up alarm OFF");
             }
             SharedPreferences.Editor editor = preferences.edit();
@@ -579,6 +604,7 @@ public class SetupActivity extends AppCompatActivity {
                         PendingIntent pendingIntent = PendingIntent.getService(this, SLEEP_REMINDER_REQUEST_CODE, reminderIntent, 0);
                         alarmManager.cancel(pendingIntent);
                         Log.d(TAG, "turn previous sleep reminder OFF");
+                        pendingIntent.cancel();
                     }
                     // turn sleep notification on
                     setNotification(SLEEP_REMINDER_REQUEST_CODE, wantedSleepTime, wantedSleepAMPM);
@@ -590,6 +616,7 @@ public class SetupActivity extends AppCompatActivity {
                 Intent reminderIntent = new Intent(this, ReminderService.class);
                 PendingIntent pendingIntent = PendingIntent.getService(this, SLEEP_REMINDER_REQUEST_CODE, reminderIntent, 0);
                 alarmManager.cancel(pendingIntent);
+                pendingIntent.cancel();
                 Log.d(TAG, "turn sleep reminder OFF");
 
             }
