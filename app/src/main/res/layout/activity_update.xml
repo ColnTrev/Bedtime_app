@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="New Item"
+        android:hint="activity"
         android:textColor="@android:color/background_light"
         android:ems="10"
         android:layout_alignParentTop="true"
@@ -44,7 +44,8 @@
         android:layout_marginEnd="14dp"
         android:id="@+id/addBtn"
         android:onClick="addNewItem"
-        android:textColor="@color/colorAccent"/>
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"/>
 
     <TextView
         android:text="What did you do before you went to sleep?"

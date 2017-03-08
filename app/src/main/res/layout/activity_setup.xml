@@ -48,7 +48,7 @@
 
     <TextView
         android:text="AM"
-        android:textColor="@android:color/background_light"
+        android:textColor="@color/colorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView_wakeUp"
@@ -162,7 +162,7 @@
 
     <TextView
         android:text="PM"
-        android:textColor="@android:color/background_light"
+        android:textColor="@color/colorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"

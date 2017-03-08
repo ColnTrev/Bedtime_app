@@ -30,7 +30,9 @@
         android:layout_below="@+id/textView_recQuest"
         android:id="@+id/textView_note"
         android:textSize="14sp"
-        android:textColor="@color/colorPrimary"/>
+        android:textColor="@android:color/background_light"
+
+        />
 
     <TextView
         android:text="Actual Bed time"
@@ -48,7 +50,7 @@
 
     <TextView
         android:text="PM"
-        android:textColor="@android:color/background_light"
+        android:textColor="@color/colorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/textView5"
@@ -104,7 +106,7 @@
         />
     <TextView
         android:text="AM"
-        android:textColor="@android:color/background_light"
+        android:textColor="@color/colorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textView5"
@@ -119,6 +121,7 @@
     <CheckBox
         android:text="Just now"
         android:textColor="@android:color/background_light"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView5"

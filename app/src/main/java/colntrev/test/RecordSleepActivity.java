@@ -211,7 +211,7 @@ public class RecordSleepActivity extends AppCompatActivity {
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);
                 int date = calendar.get(Calendar.DATE);
-                String fullDate = "" + year + " " + month + " " + date;
+                String fullDate = "" + year + "/" + month + "/" + date;
 
                 // get actual wake up / sleep stat
                 String bedTime = editText_bedTime.getText().toString();
