@@ -1,8 +1,10 @@
 package colntrev.test;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -51,5 +53,19 @@ public class AnalyzeActivity extends AppCompatActivity {
     protected void onDestroy() {
         datasource.close();
         super.onDestroy();
+    }
+
+    public void sendEmail(View view) {
+        TextView analyze = (TextView) findViewById(R.id.displayText);
+        String progress = analyze.getText().toString();
+        try {
+            Intent gmail = new Intent(Intent.ACTION_SEND);
+            gmail.setType("message/rfc822");
+            gmail.putExtra(Intent.EXTRA_SUBJECT, "My progress");
+            gmail.putExtra(Intent.EXTRA_TEXT, progress);
+            startActivity( Intent.createChooser(gmail, "Email to..."));
+        } catch(ActivityNotFoundException e){
+            Log.d("sendEmail", e.toString());
+        }
     }
 }
