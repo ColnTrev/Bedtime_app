@@ -111,7 +111,8 @@ public class SleepRecordDataSource {
     public void getTopActivities(ArrayList<String> activityList){
         // get number of entries
         int numOfEntries = 1;
-        String query = "SELECT COUNT(*) FROM " + dbHelper.TABLE_NAME;
+        String query = "SELECT COUNT(*) FROM " + dbHelper.TABLE_NAME+ " WHERE "+
+                dbHelper.COL_REAL_DURATION + "< 8 ";
         String[] selectionArg = new String[0];
         Cursor cursor = database.rawQuery(query,selectionArg);
         if(cursor.moveToFirst()){
@@ -131,8 +132,8 @@ public class SleepRecordDataSource {
             Log.d(TAG, "NIKIFOR");
             while(!cursor2.isAfterLast()){
 
-
-                String entry = ""+ ((double)(cursor2.getInt(0))/numOfEntries)*100 +"% "+ cursor2.getString(1);
+                double roundedP = (double) Math.round((double)(cursor2.getInt(0))/numOfEntries*100*10)/10;
+                String entry = ""+ roundedP + "% "+ cursor2.getString(1);
                 activityList.add(entry);
 
                 Log.d(TAG, "Top activities: " +entry);

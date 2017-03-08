@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -67,12 +68,17 @@ public class RecordSleepActivity extends AppCompatActivity {
 
         int hour = calendar.get(Calendar.HOUR); // HOUR for AMPM format... but gotta check AM,PM
         int min = calendar.get(Calendar.MINUTE);
-        wakeTime.setText(""+hour+":"+min);
+        if (min < 10) {
+            wakeTime.setText("" + hour + ":0" + min);
+        }else{
+            wakeTime.setText("" + hour + ":" + min);
+        }
 
         int hourMilitary = calendar.get(Calendar.HOUR_OF_DAY);
         if (hourMilitary > 12 || (hourMilitary == 12 && min > 0)){
             textView_wakeAMPM.setText("PM");
         }
+
 
 
 
@@ -131,24 +137,31 @@ public class RecordSleepActivity extends AppCompatActivity {
             String wakeTime = editText_wakeTime.getText().toString();
             String wakeAMPM = textView_wakeAMPM.getText().toString();
             double duration = getDurationInHr(bedAMPM, bedTime, wakeAMPM, wakeTime);
-
-            // get desired wake up / reminder stat preferences
-            SharedPreferences preferences = getSharedPreferences(SetupActivity.PREFS_NAME, 0);
-            String wantedWakeTime = preferences.getString(SetupActivity.PREF_KEY_WANTED_WAKE_TIME, "6:00");
-            String wantedWakeAMPM = preferences.getString(SetupActivity.PREF_KEY_WANTED_WAKE_AMPM, "AM");
-            String wantedSleepTime = preferences.getString(SetupActivity.PREF_KEY_REMIND_TIME, "10:00");
-            String wantedSleepAMPM = preferences.getString(SetupActivity.PREF_KEY_REMIND_AMPM, "PM");
-            double wantedDuration = getDurationInHr(wantedSleepAMPM, wantedSleepTime, wantedWakeAMPM, wantedWakeTime);
-
-            long rowID = datasource.addSleepEntry(fullDate, duration, wantedDuration, "");
-
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putLong(SetupActivity.PREF_KEY_ROWID, rowID);
-            editor.commit();
+            if (duration<=0){
+                Toast.makeText(this,"Invalid time input", Toast.LENGTH_LONG).show();
+                btn.setError("Invalid time input");
 
 
-            Log.d("katsu", "added to db @ row " + rowID);
-            btn.setText("RECORD NIGHT ACTIVITY");
+            }else {
+
+                // get desired wake up / reminder stat preferences
+                SharedPreferences preferences = getSharedPreferences(SetupActivity.PREFS_NAME, 0);
+                String wantedWakeTime = preferences.getString(SetupActivity.PREF_KEY_WANTED_WAKE_TIME, "6:00");
+                String wantedWakeAMPM = preferences.getString(SetupActivity.PREF_KEY_WANTED_WAKE_AMPM, "AM");
+                String wantedSleepTime = preferences.getString(SetupActivity.PREF_KEY_REMIND_TIME, "10:00");
+                String wantedSleepAMPM = preferences.getString(SetupActivity.PREF_KEY_REMIND_AMPM, "PM");
+                double wantedDuration = getDurationInHr(wantedSleepAMPM, wantedSleepTime, wantedWakeAMPM, wantedWakeTime);
+
+                long rowID = datasource.addSleepEntry(fullDate, duration, wantedDuration, "");
+
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putLong(SetupActivity.PREF_KEY_ROWID, rowID);
+                editor.commit();
+
+
+                Log.d("katsu", "added to db @ row " + rowID);
+                btn.setText("RECORD NIGHT ACTIVITY");
+            }
 
         }else{
             Intent intent = new Intent(this, UpdateActivity.class);
