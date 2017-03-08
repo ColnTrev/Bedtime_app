@@ -21,9 +21,8 @@ public class WakeAlarmService extends Service {
         return null;
     }
 
-
-    public void onCreate() {
-        super.onCreate();
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
 
         Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
@@ -44,6 +43,14 @@ public class WakeAlarmService extends Service {
                 .build();
         NotificationManager notifManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         notifManager.notify(2, mNotify);
+
+        return Service.START_NOT_STICKY;
+    }
+
+    public void onCreate() {
+        super.onCreate();
+
+
 
 
     }
