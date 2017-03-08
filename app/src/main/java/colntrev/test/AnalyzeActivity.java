@@ -70,7 +70,7 @@ public class AnalyzeActivity extends AppCompatActivity {
 
         String sleepRecords = "";
         for(SleepEntry entry : allSleep){
-            sleepRecords += "Date:" + entry.getDate() + " Hours slept:"+entry.getRealDuration() +" Activity before sleep:"+entry.getActivity()+"\n";
+            sleepRecords += "Date:" + entry.getDate() + " Hours slept:"+ (double)Math.round(entry.getRealDuration()*100)/100 +" Activity before sleep:"+entry.getActivity()+"\n";
 
         }
 
