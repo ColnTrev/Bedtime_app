@@ -25,9 +25,7 @@
         style="?attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:id="@+id/backBtn"
-        android:onClick="backToMain"
+
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -49,5 +47,7 @@
         android:layout_alignBaseline="@+id/backBtn"
         android:layout_alignBottom="@+id/backBtn"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"/>
 </RelativeLayout>

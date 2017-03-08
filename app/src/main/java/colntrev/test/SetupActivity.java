@@ -381,13 +381,13 @@ public class SetupActivity extends AppCompatActivity {
             editor.putString(PREF_KEY_WANTED_WAKE_TIME, timeInput);
             editor.putString(PREF_KEY_WANTED_WAKE_AMPM, amPm);
             editor.putBoolean(PREF_KEY_WAKE_ALARM_IS_ON, true);
-            Log.d("katsu", "req code = wake 2");
+            Log.d("katsu", "pref = wake on");
 
         }else if(requestCode == SLEEP_REMINDER_REQUEST_CODE){
             editor.putString(PREF_KEY_REMIND_TIME, timeInput);
             editor.putString(PREF_KEY_REMIND_AMPM, amPm);
             editor.putBoolean(PREF_KEY_REMIND_IS_ON, true);
-            Log.d("katsu", "req code = sleep 2");
+            Log.d("katsu", "pref = sleep on");
 
         }
         editor.commit();
@@ -550,6 +550,7 @@ public class SetupActivity extends AppCompatActivity {
 
         // SET WAKE TIME ALARM IF NEEDED
         if(switch_wake.isChecked()){
+            Log.d(TAG, "switch wake is on");
             if (!okToSetAlarm){
                 Toast.makeText(this, "ERROR: Please use 00:00 to 12:59 time", Toast.LENGTH_LONG).show();
             }else {
@@ -573,6 +574,8 @@ public class SetupActivity extends AppCompatActivity {
             }
         }else{
             // turn wake up alarm OFF
+            Log.d(TAG, "switch wake is off");
+
             if (alarmManager!= null) {
                 Intent reminderIntent = new Intent(this, WakeAlarmService.class);
                 PendingIntent pendingIntent = PendingIntent.getService(this, WAKE_ALARM_REQUEST_CODE, reminderIntent, 0);
@@ -582,6 +585,7 @@ public class SetupActivity extends AppCompatActivity {
             }
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(PREF_KEY_WAKE_ALARM_IS_ON, false);
+            Log.d(TAG, "pref wake off");
             editor.commit();
 
         }
@@ -589,6 +593,8 @@ public class SetupActivity extends AppCompatActivity {
 
         // SET SLEEP TIME REMINDER IF NEEDED
         if(switch_sleep.isChecked()){
+            Log.d(TAG, "switch sleep on");
+
             if(!okToSetReminder){
                 Toast.makeText(this, "ERROR: Please use 00:00 to 12:59 time", Toast.LENGTH_LONG).show();
             }else {
@@ -612,6 +618,8 @@ public class SetupActivity extends AppCompatActivity {
             }
         }else{
             // turn sleep reminder OFF
+            Log.d(TAG, "switch sleep is off");
+
             if (alarmManager!= null) {
                 Intent reminderIntent = new Intent(this, ReminderService.class);
                 PendingIntent pendingIntent = PendingIntent.getService(this, SLEEP_REMINDER_REQUEST_CODE, reminderIntent, 0);
