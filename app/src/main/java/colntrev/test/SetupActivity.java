@@ -25,6 +25,10 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
+
+/**
+ * Created by Thy Vu on 2/20/17.
+ */
 public class SetupActivity extends AppCompatActivity {
     static final String PREFS_NAME = "Preferences";
     static final String PREF_KEY_WANTED_WAKE_TIME = "wantedWakeTime";

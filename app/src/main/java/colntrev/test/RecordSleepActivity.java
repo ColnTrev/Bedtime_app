@@ -23,6 +23,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Calendar;
 
+/**
+ * Created by Thy Vu on 2/20/17.
+ */
+
 public class RecordSleepActivity extends AppCompatActivity {
     private SleepRecordDataSource datasource;
 
