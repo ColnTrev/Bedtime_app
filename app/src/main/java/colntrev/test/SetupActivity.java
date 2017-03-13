@@ -23,13 +23,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 public class SetupActivity extends AppCompatActivity {
@@ -44,13 +37,13 @@ public class SetupActivity extends AppCompatActivity {
 
     private final static int SLEEP_REMINDER_REQUEST_CODE = 54321;
     private final static int WAKE_ALARM_REQUEST_CODE = 12345;
+    private final static String TAG = "katsu";
 
     private EditText editText_wantedWakeTime;
     private EditText editText_remindTime;
     private TextView textView_wantedWakeAMPM;
     private TextView textView_remindAMPM;
     private AlarmManager alarmManager;
-    //private Button button_remind;
     private SharedPreferences preferences;
 
     private Switch switch_wake, switch_sleep;
@@ -61,14 +54,13 @@ public class SetupActivity extends AppCompatActivity {
     private PendingIntent pIntentSleep, pIntentWake;
 
     private boolean okToSetAlarm, okToSetReminder;
-    private String TAG;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
 
-        TAG = "katsu";
+
 
         editText_remindTime = (EditText) findViewById(R.id.editText_setTime);
         textView_remindAMPM = (TextView) findViewById(R.id.textView_AMPM2);
@@ -76,7 +68,6 @@ public class SetupActivity extends AppCompatActivity {
         editText_wantedWakeTime = (EditText) findViewById(R.id.editText_time1);
         textView_wantedWakeAMPM = (TextView) findViewById(R.id.textView_AMPM);
 
-        //button_remind = (Button) findViewById(R.id.button_setReminder);
         alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
 
         switch_sleep = (Switch) findViewById(R.id.switch_sleep);
@@ -96,12 +87,14 @@ public class SetupActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 /*
+        // For future improvement
         editText_wantedWakeTime.setText(preferences.getString(PREF_KEY_WANTED_WAKE_TIME, "6:00"));
         textView_wantedWakeAMPM.setText(preferences.getString(PREF_KEY_WANTED_WAKE_AMPM, "WA"));
         editText_remindTime.setText(preferences.getString(PREF_KEY_REMIND_TIME, "10:00"));
         textView_remindAMPM.setText(preferences.getString(PREF_KEY_REMIND_AMPM, "PM"));
 */
 
+        // switch label change to indicate on/off
         switch_sleep.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isOn) {
@@ -123,6 +116,7 @@ public class SetupActivity extends AppCompatActivity {
             }
         });
 
+        // Display default suggested bed times.
         Button recTime1 = (Button) findViewById(R.id.button_rec1);
         recTime1.setText("10:15 PM");
         Button recTime2 = (Button) findViewById(R.id.button_rec2);
@@ -132,7 +126,7 @@ public class SetupActivity extends AppCompatActivity {
 
 
 
-        // Display time preferences
+        // Display saved time preferences
         Log.d("katsu", preferences.getString(PREF_KEY_WANTED_WAKE_TIME, "6:00"));
         editText_wantedWakeTime.setText(preferences.getString(PREF_KEY_WANTED_WAKE_TIME, "6:00"));
         textView_wantedWakeAMPM.setText(preferences.getString(PREF_KEY_WANTED_WAKE_AMPM, "AM"));
@@ -144,16 +138,15 @@ public class SetupActivity extends AppCompatActivity {
 
 
 
-
+        // set switch on/off based on saved preference
         if (preferences.getBoolean(PREF_KEY_REMIND_IS_ON, false)){
-            // button_remind.setText("REMINDER: "+preferences.getString(PREF_KEY_REMIND_TIME, "10:30") +" "+ preferences.getString(PREF_KEY_REMIND_AMPM, "PM"));
             switch_sleep.setChecked(true);
         }
         if (preferences.getBoolean(PREF_KEY_WAKE_ALARM_IS_ON, false)){
-            // button_remind.setText("REMINDER: "+preferences.getString(PREF_KEY_REMIND_TIME, "10:30") +" "+ preferences.getString(PREF_KEY_REMIND_AMPM, "PM"));
             switch_wake.setChecked(true);
         }
 
+        // editing wake time changes the suggested sleep times
         editText_wantedWakeTime.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -183,8 +176,6 @@ public class SetupActivity extends AppCompatActivity {
 
                     Log.d("katsudon", "time input:"+timeInput);
 
-                    //Log.d("katsudon", timeInput.substring(0,timeInput.indexOf(":")));
-
 
                     // get user-desired wake time
                     int wakeHr;
@@ -208,10 +199,9 @@ public class SetupActivity extends AppCompatActivity {
                     Button recTime2 = (Button) findViewById(R.id.button_rec2);
                     Button recTime3 = (Button) findViewById(R.id.button_rec3);
 
-                    // Note: algo works for suggested sleep times only
                     // Calculate and display suggested sleep time #1
                     int cycleTime = 90;
-                    int sleepTime= (wakeHr+12) * 60 + wakeMin - 15 - cycleTime*5;
+                    int sleepTime= (wakeHr+12) * 60 + wakeMin - 15 - cycleTime*6;
                     int hr = sleepTime/60;
                     int min = sleepTime%60;
                     String amPm = "PM";
@@ -275,6 +265,7 @@ public class SetupActivity extends AppCompatActivity {
         });
 
 
+        // Display warning for bad time inputs (not 00:00 to 12:59)
         editText_remindTime.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -311,19 +302,12 @@ public class SetupActivity extends AppCompatActivity {
         });
 
 
-
-
-
     }
 
-    // Set reminder based on current user's input in "Set time: --:--"
+    // Set alarm to user's input of time
     private void setNotification(int requestCode, String timeInput, String amPm)  {
         Log.d("katsu", "setting reminder");
-        // new version: in progress
 
-        //String timeInput = editText_remindTime.getText().toString();
-
-        // Set alarm to user's input of reminder time
 
         // Get user's reminder time input
         int remindHr;
@@ -338,10 +322,7 @@ public class SetupActivity extends AppCompatActivity {
         }
 
 
-        // Set alarm to user's reminder time
-        /*if (amPm.equals("PM")&& remindHr<12){
-            remindHr += 12; // convert to 24-hr format
-        }*/
+        // Set Notification Service
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR, remindHr);
@@ -356,25 +337,27 @@ public class SetupActivity extends AppCompatActivity {
             Log.d(TAG, "PM");
         }
 
+        // Create Pending Intent
         Intent intent;
         PendingIntent pendingIntent;
         if (requestCode == SLEEP_REMINDER_REQUEST_CODE) {
             intent = new Intent(this, ReminderService.class);
             pendingIntent = PendingIntent.getService(this, SLEEP_REMINDER_REQUEST_CODE, intent, 0);
-            Log.d("katsu", "req code = sleep");
+            Log.d(TAG, "req code = sleep");
         }else{
             intent = new Intent(this, WakeAlarmService.class);
             pendingIntent = PendingIntent.getService(this, WAKE_ALARM_REQUEST_CODE, intent, 0);
-            Log.d("katsu", "req code = wake");
+            Log.d(TAG, "req code = wake");
 
         }
 
+        // make notification repeat every day
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 1000*60*60*24, pendingIntent);
 
 
 
-        // PUT SHAREDPREFERENCE HERE
+        // Update preferences
         // key-value: wantedWakeTime - hh:mm, wantedWakeTimeAMPM - AM, wantedDuration - double
         SharedPreferences.Editor editor = preferences.edit();
         if (requestCode == WAKE_ALARM_REQUEST_CODE) {
@@ -393,128 +376,28 @@ public class SetupActivity extends AppCompatActivity {
         editor.commit();
 
 
-
-
-
-        Log.d("katsu", "set reminder:"+remindHr+":"+remindMin);
-
-
+        Log.d(TAG, "finished setting reminder:"+remindHr+":"+remindMin);
     }
 
-    // TO DELETE LATER
-    // Save default reminder time
-    public void saveDefaultReminder(View view) throws IOException {
-        // OLD
-        String filename = "defaultReminder";
-        String defaultReminder = editText_remindTime.getText().toString();
-        FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE);
-        fos.write(defaultReminder.getBytes());
-        fos.close();
-        // END OLD
-    }
 
-    /*
-    // TO DELETE LATER
-    // Load default reminder time
-    public void displayDefaultSetting(View view) {
 
-        String filename = "defaultReminder";
-        StringBuilder sb = new StringBuilder();
-        String content;
-        //Context context = getApplicationContext();
-        try {
-            FileInputStream fis = openFileInput(filename);
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader bufferedReader = new BufferedReader(isr);
-            String line;
-            while ((line = bufferedReader.readLine()) != null){
-                sb.append(line);
 
-            }
-            fis.close();
-            isr.close();
-            bufferedReader.close();
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // for debug
-        //TextView textView = (TextView) findViewById(R.id.textView_test);
-        //textView.setText("Default reminder is: " + sb.toString());
-
-        // set wakeup time
-        EditText setTime = (EditText) findViewById(R.id.editText_setTime);
-        setTime.setText(sb.toString());
-
-    }
-*/
-
-    // Set reminder time input to user-selected suggested time
+    // Set reminder time to user-selected radio button
     public void onSuggestedTimeClick(View view) {
-
         String chosenTime = ((RadioButton)view).getText().toString();
         if (!chosenTime.equals("--:--")) {
-            // "00:00 AM"
+            // "00:00" format
             String[] timeAMPM = chosenTime.split(" ");
             editText_remindTime.setText(timeAMPM[0]);
-            //String[] hrMin = timeAMPM[0].split(":");
-            //int hr = Integer.parseInt(chosenTime.substring(0,chosenTime.indexOf(":")));
-            // Just simplifying things for user. Not best solution.
-            //if(hr < 6){
-                textView_remindAMPM.setText(timeAMPM[1]);
-            //}else{
-                //textView_remindAMPM.setText("PM");
-            //}
+            textView_remindAMPM.setText(timeAMPM[1]);
         }
 
 
     }
-/*
-    // If reminder is OFF, turn reminder ON.
-    // If reminder is ON, turn reminder OFF.
-    public void onClickRemindButton(View view) {
-
-        if(switch_sleep.isChecked()){ // button_remind.getText().toString().toLowerCase().equals("reminder: off")){
-            // turn reminder ON
-            //setReminder(SLEEP_REMINDER_REQUEST_CODE);
-        }else{
-            // turn reminder OFF
-            if (alarmManager!= null) {
-                Intent reminderIntent = new Intent(this, ReminderService.class);
-                PendingIntent pendingIntent = PendingIntent.getService(this, SLEEP_REMINDER_REQUEST_CODE, reminderIntent, 0);
-                alarmManager.cancel(pendingIntent);
-            }
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(PREF_KEY_REMIND_IS_ON, false);
-            editor.commit();
 
 
-            ((Button)view).setText("reminder: off");
-        }
-
-    }
-
-    // TO DELETE LATER
-    public void testDb(View view) {
-        SleepRecordDataSource datasource = new SleepRecordDataSource(this);
-        datasource.open();
-
-        ArrayList<SleepEntry> sleepEntries = new ArrayList<>();
-        datasource.getAllSleepEntries(sleepEntries);
-
-        ArrayList<String> topAct = new ArrayList<>();
-        datasource.getTopActivities(topAct);
-
-
-        datasource.close();
-
-
-    }
-*/
-
+    // Clicking TextView alternates "AM" to "PM" and vice versa
     public void toggleAMPM(View view) {
         TextView tvAMPM = (TextView) view;
         String currentText = tvAMPM.getText().toString();
@@ -525,6 +408,8 @@ public class SetupActivity extends AppCompatActivity {
         }
     }
 
+    // Returns true if editText has "00:00" to "12:59" format
+    // Param: editText      EditText with time text
     private boolean isValidTime(EditText editText){
         boolean isValid = false;
         String timeInput = editText.getText().toString();
@@ -540,14 +425,14 @@ public class SetupActivity extends AppCompatActivity {
             }else{
                 isValid=true;
             }
+
         }
         return isValid;
     }
 
+    // Create background Service that will generate a bedtime and/or wake-up Notification to user
+    // Param: view      SAVE button
     public void onClickSave(View view) {
-
-
-
         // SET WAKE TIME ALARM IF NEEDED
         if(switch_wake.isChecked()){
             Log.d(TAG, "switch wake is on");
@@ -626,15 +511,11 @@ public class SetupActivity extends AppCompatActivity {
                 alarmManager.cancel(pendingIntent);
                 pendingIntent.cancel();
                 Log.d(TAG, "turn sleep reminder OFF");
-
             }
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(PREF_KEY_REMIND_IS_ON, false);
             editor.commit();
-
         }
-
-
 
     }
 }

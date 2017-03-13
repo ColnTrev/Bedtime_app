@@ -66,10 +66,10 @@ public class RecordSleepActivity extends AppCompatActivity {
 
             }
 
+            // Display error message for bad user's time input
             @Override
             public void afterTextChanged(Editable editable) {
                 String timeInput = editText_bedTime.getText().toString();
-                //Log.d(TAG, timeInput);
                 if (timeInput.length() > 0 && timeInput.charAt(0) != ':') {
                     String[] hrMin = timeInput.split(":");
                     int hour = Integer.parseInt(hrMin[0]);
@@ -77,12 +77,10 @@ public class RecordSleepActivity extends AppCompatActivity {
                     if (hrMin.length > 1)
                         minute = Integer.parseInt(hrMin[1]);
                     if (hour > 12 || minute > 59) {
-                        //okToProceed = false;
                         okToSave_sleepT=false;
                         editText_bedTime.setError("00:00 to 12:59 only");
                     }else{
                         okToSave_sleepT = true;
-                        //okToProceed=true;
                     }
                 }else{
                     okToSave_sleepT = false;
@@ -102,10 +100,10 @@ public class RecordSleepActivity extends AppCompatActivity {
 
             }
 
+            // Display error message for bad user's time input
             @Override
             public void afterTextChanged(Editable editable) {
                 String timeInput = editText_wakeTime.getText().toString();
-                //Log.d(TAG, timeInput);
                 if (timeInput.length() > 0 && timeInput.charAt(0) != ':') {
                     String[] hrMin = timeInput.split(":");
                     int hour = Integer.parseInt(hrMin[0]);
@@ -113,12 +111,10 @@ public class RecordSleepActivity extends AppCompatActivity {
                     if (hrMin.length > 1)
                         minute = Integer.parseInt(hrMin[1]);
                     if (hour > 12 || minute > 59) {
-                        //okToProceed = false;
                         okToSave_wakeT = false;
                         editText_wakeTime.setError("00:00 to 12:59 only");
                     }else{
                         okToSave_wakeT = true;
-                        //okToProceed=true;
                     }
                 }else{
                     okToSave_wakeT = false;
@@ -145,6 +141,7 @@ public class RecordSleepActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    // Fill wakeTime EditText with current time
     public void setWakeTimeToNow(View view) {
         EditText wakeTime = (EditText) findViewById(R.id.editText_wakeT);
 
@@ -160,41 +157,11 @@ public class RecordSleepActivity extends AppCompatActivity {
         if (hourMilitary > 12 || (hourMilitary == 12 && min > 0)){
             textView_wakeAMPM.setText("PM");
         }
-
-
-
-
     }
 
-    public void loadSleepRecord(View view) {
-        String filename = "SleepRecord";
-        StringBuilder sb = new StringBuilder();
-        try {
-            FileInputStream fis = openFileInput(filename);
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader bufferedReader = new BufferedReader(isr);
-            String line;
-            while ((line = bufferedReader.readLine()) != null){
-                sb.append("\n"+line);
-
-            }
-            fis.close();
-            isr.close();
-            bufferedReader.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //TextView textView_test = (TextView) findViewById(R.id.textView_record);
-        //textView_test.setText(sb.toString());
 
 
-    }
-
-    // Record sleep statistics when user click "SAVE"
+    // Record today's sleep statistics when user click "SAVE"
     public void recordSleepTime(View view) {
         Button btn = (Button) view;
         String btnText = btn.getText().toString().toUpperCase();
@@ -253,36 +220,6 @@ public class RecordSleepActivity extends AppCompatActivity {
             startActivity(intent);
 
         }
-
-
-        // DATABASE INSERT
-
-
-
-
-
-
-        // OLD
-        /*
-        String filename = "SleepRecord";
-        String record = ""+ calendar.get(Calendar.YEAR) + " " + calendar.get(Calendar.MONTH) + " "
-                + calendar.get(Calendar.DATE)+ " ";
-
-
-
-        record = record + editText_bedTime.getText().toString() + " " + textView_bedAMPM.getText().toString() + " "
-                + editText_wakeTime.getText().toString()+ " "+ textView_wakeAMPM.getText().toString() + "\n";
-
-        FileOutputStream fos = null;
-        try {
-            fos = openFileOutput(filename, Context.MODE_APPEND);
-            fos.write(record.getBytes());
-            fos.close();
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
-        }
-        */
-        // END OLD
 
     }
 
@@ -354,6 +291,7 @@ public class RecordSleepActivity extends AppCompatActivity {
         }
     }
 
+    // Clicking view will show hours of sleep based on bed time and wake time
     public void showDuration(View view) {
         if (okToSave_sleepT && okToSave_wakeT) {
             double duration = getDurationInHr(textView_bedAMPM.getText().toString(), editText_bedTime.getText().toString(), textView_wakeAMPM.getText().toString(), editText_wakeTime.getText().toString());

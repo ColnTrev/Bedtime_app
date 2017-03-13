@@ -22,6 +22,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String COL_ACTIVITY = "activity";
 
     /*
+    // future release
     public static final String COL_SLEEP_TIME = "sleepTime";
     public static final String COL_SLEEP_AMPM = "sleepAMPM";
     public static final String COL_WAKE_TIME = "wakeTime";
