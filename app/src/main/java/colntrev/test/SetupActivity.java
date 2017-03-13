@@ -90,13 +90,7 @@ public class SetupActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-/*
-        // For future improvement
-        editText_wantedWakeTime.setText(preferences.getString(PREF_KEY_WANTED_WAKE_TIME, "6:00"));
-        textView_wantedWakeAMPM.setText(preferences.getString(PREF_KEY_WANTED_WAKE_AMPM, "WA"));
-        editText_remindTime.setText(preferences.getString(PREF_KEY_REMIND_TIME, "10:00"));
-        textView_remindAMPM.setText(preferences.getString(PREF_KEY_REMIND_AMPM, "PM"));
-*/
+
 
         // switch label change to indicate on/off
         switch_sleep.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
