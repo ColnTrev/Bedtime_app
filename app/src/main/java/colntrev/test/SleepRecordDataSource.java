@@ -16,7 +16,6 @@ import java.util.ArrayList;
 
 public class SleepRecordDataSource {
     private final static String TAG = "katsu";
-    // database fields
     private SQLiteDatabase database;
     private MySQLiteHelper dbHelper;
     private String[] allColumns = {MySQLiteHelper.COL_ID, MySQLiteHelper.COL_DATE,
@@ -95,7 +94,6 @@ public class SleepRecordDataSource {
                 SleepEntry entry = new SleepEntry(cursor.getLong(0), cursor.getString(1), cursor.getDouble(2),
                         cursor.getDouble(3), cursor.getString(4));
 
-                //String entry = ""+ cursor.getInt(0) +" "+ cursor.getString(1);
                 activityList.add(entry);
 
                 Log.d(TAG, "Making sleep entry: " +cursor.getLong(0)+ " "+ cursor.getString(1) + " " + cursor.getDouble(2)
@@ -117,7 +115,7 @@ public class SleepRecordDataSource {
         Cursor cursor = database.rawQuery(query,selectionArg);
         if(cursor.moveToFirst()){
             numOfEntries = cursor.getInt(0);
-            Log.d(TAG, "OK:"+numOfEntries);
+            Log.d(TAG, "num of entries:"+numOfEntries);
         }else{
             Log.d(TAG, "get total number of entries (SleepRecordDataSource.java)");
         }
@@ -129,7 +127,6 @@ public class SleepRecordDataSource {
         Cursor cursor2 = database.rawQuery(queryPercent,selectionArg);
 
         if(cursor2.moveToFirst()){
-            Log.d(TAG, "NIKIFOR");
             while(!cursor2.isAfterLast()){
 
                 double roundedP = (double) Math.round((double)(cursor2.getInt(0))/numOfEntries*100*10)/10;
@@ -150,7 +147,7 @@ public class SleepRecordDataSource {
 
     public void clearAllEntries(){
 
-        database.execSQL("DROP TABLE IF EXISTS "+ dbHelper.TABLE_NAME);
+        database.execSQL("DELETE * FROM"+ dbHelper.TABLE_NAME);
     }
 
 }
