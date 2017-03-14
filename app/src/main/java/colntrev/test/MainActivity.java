@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goTips(View view) {
-        Intent trend = new Intent(this, TipsActivity.class);
-        startActivity(trend);
+        Intent tips = new Intent(this, TipsActivity.class);
+        startActivity(tips);
     }
 
     public void goUpdate(View view) {

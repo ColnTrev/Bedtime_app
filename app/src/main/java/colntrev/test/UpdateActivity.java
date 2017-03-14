@@ -73,12 +73,17 @@ public class UpdateActivity extends AppCompatActivity {
     public void addNewItem(View view) {
         EditText newItem = (EditText) findViewById(R.id.newItemAdd);
         String text = newItem.getText().toString();
+
+        // adding new item to list view
         if(adapter.getPosition(text) == -1) {
-            adapter.add(text); // adding new item to list view
+            adapter.add(text);
         }
 
+        // update database entry
+        updateDB(text);
+    }
 
-        // Thy: update database entry
+    private void updateDB(String text){
         SharedPreferences preferences = getSharedPreferences(SetupActivity.PREFS_NAME, 0);
         long rowID = preferences.getLong(SetupActivity.PREF_KEY_ROWID, -1);
         if (rowID > -1) {
