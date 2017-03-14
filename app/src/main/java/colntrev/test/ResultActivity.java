@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 
 
+// THIS CLASS IS UNUSED, GIT GAVE US TROUBLE DELETING IT SO IT'S HERE BUT IGNORE IT
+// HAVE A GOOD DAY
 
 public class ResultActivity extends AppCompatActivity {
 
