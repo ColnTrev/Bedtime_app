@@ -1,3 +1,5 @@
+
+
 package colntrev.test;
 
 import android.content.Context;
@@ -12,19 +14,17 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
+
+/**
+ * Created by Thy Vu on 2/28/17.
+ */
+
 
 public class UpdateActivity extends AppCompatActivity {
     ArrayList<SleepEntry> items; // This list will get the previous list view contents and reload them
     ArrayAdapter<String> adapter;
 
-    // Thy: for database
     private SleepRecordDataSource datasource;
 
     @Override
@@ -47,6 +47,7 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
 
+    // Populate listView with user's past night activities
     private void populateLog(){
 
         ArrayList<String> list = new ArrayList<>();
@@ -70,6 +71,7 @@ public class UpdateActivity extends AppCompatActivity {
         });
     }
 
+    // adding new item to list view
     public void addNewItem(View view) {
         EditText newItem = (EditText) findViewById(R.id.newItemAdd);
         String text = newItem.getText().toString();
